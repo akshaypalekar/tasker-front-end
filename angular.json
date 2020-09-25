@@ -119,6 +119,10 @@
           }
         }
       }
-    }},
-  "defaultProject": "tasker-front-end"
+    }
+  },
+  "defaultProject": "tasker-front-end",
+  "cli": {
+    "analytics": "f1fe9aeb-6f8b-4a8c-82f4-493ac6ebf485"
+  }
 }
