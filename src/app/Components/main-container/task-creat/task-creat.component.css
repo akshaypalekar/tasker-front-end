@@ -1,0 +1,10 @@
+.container-fluid{
+    padding: 1rem;
+    margin-bottom: 1rem;
+    border-bottom: solid 1px #ccc;
+    background-color: #f6f8fa;
+}
+
+button {
+    width: 100%;
+}

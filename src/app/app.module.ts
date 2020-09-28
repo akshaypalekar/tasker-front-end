@@ -18,8 +18,8 @@ import {MatDialogModule} from '@angular/material/dialog';
 import { ListCreateDialogComponent } from './dialog/list-create-dialog/list-create-dialog.component';
 import { FormsModule } from '@angular/forms';
 import { MatInputModule } from '@angular/material/input';
-
-
+import { TaskCreatComponent } from './components/main-container/task-creat/task-creat.component';
+import {MatGridListModule} from '@angular/material/grid-list';
 
 
 @NgModule({
@@ -29,6 +29,7 @@ import { MatInputModule } from '@angular/material/input';
     CreateListButtonComponent,
     ListMenuComponent,
     ListCreateDialogComponent,
+    TaskCreatComponent,
   ],
   imports: [
     BrowserModule,
@@ -43,7 +44,8 @@ import { MatInputModule } from '@angular/material/input';
     DragDropModule,
     MatDialogModule,
     FormsModule,
-    MatInputModule
+    MatInputModule,
+    MatGridListModule
   ],
   providers: [],
   bootstrap: [AppComponent]
