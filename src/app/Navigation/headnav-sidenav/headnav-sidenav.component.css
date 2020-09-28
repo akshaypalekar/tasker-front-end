@@ -3,7 +3,7 @@
 }
 
 .sidenav {
-  width: 300px;
+  width: 280px;
 }
 
 .sidenav .mat-toolbar {
@@ -17,6 +17,7 @@
 }
 
 app-create-list-button {
+  margin-top: 10px;
   display: flex;
   justify-content: center;
 }

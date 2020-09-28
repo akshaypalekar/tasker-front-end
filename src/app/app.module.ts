@@ -12,12 +12,23 @@ import { MatSidenavModule } from '@angular/material/sidenav';
 import { MatIconModule } from '@angular/material/icon';
 import { MatListModule } from '@angular/material/list';
 import { CreateListButtonComponent } from './components/sidebar/create-list/create-list-button/create-list-button.component';
+import { ListMenuComponent } from './components/sidebar/list-menu/list-menu/list-menu.component';
+import {DragDropModule} from '@angular/cdk/drag-drop';
+import {MatDialogModule} from '@angular/material/dialog';
+import { ListCreateDialogComponent } from './dialog/list-create-dialog/list-create-dialog.component';
+import { FormsModule } from '@angular/forms';
+import { MatInputModule } from '@angular/material/input';
+
+
+
 
 @NgModule({
   declarations: [
     AppComponent,
     HeadnavSidenavComponent,
-    CreateListButtonComponent
+    CreateListButtonComponent,
+    ListMenuComponent,
+    ListCreateDialogComponent,
   ],
   imports: [
     BrowserModule,
@@ -28,7 +39,11 @@ import { CreateListButtonComponent } from './components/sidebar/create-list/crea
     MatButtonModule,
     MatSidenavModule,
     MatIconModule,
-    MatListModule
+    MatListModule,
+    DragDropModule,
+    MatDialogModule,
+    FormsModule,
+    MatInputModule
   ],
   providers: [],
   bootstrap: [AppComponent]
