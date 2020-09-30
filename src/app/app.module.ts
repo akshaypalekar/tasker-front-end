@@ -20,6 +20,11 @@ import { FormsModule } from '@angular/forms';
 import { MatInputModule } from '@angular/material/input';
 import { TaskCreatComponent } from './components/main-container/task-creat/task-creat.component';
 import {MatGridListModule} from '@angular/material/grid-list';
+import { TaskListComponent } from './components/main-container/task-list/task-list.component';
+import { EmptyContainerComponent } from './components/main-container/empty-container/empty-container.component';
+import {MatCardModule} from '@angular/material/card';
+import { WrapperContainerComponent } from './components/main-container/wrapper-container/wrapper-container.component';
+import { TaskDeleteDialogComponent } from './dialog/task-delete-dialog/task-delete-dialog.component';
 
 
 @NgModule({
@@ -30,6 +35,10 @@ import {MatGridListModule} from '@angular/material/grid-list';
     ListMenuComponent,
     ListCreateDialogComponent,
     TaskCreatComponent,
+    TaskListComponent,
+    EmptyContainerComponent,
+    WrapperContainerComponent,
+    TaskDeleteDialogComponent,
   ],
   imports: [
     BrowserModule,
@@ -45,7 +54,8 @@ import {MatGridListModule} from '@angular/material/grid-list';
     MatDialogModule,
     FormsModule,
     MatInputModule,
-    MatGridListModule
+    MatGridListModule,
+    MatCardModule
   ],
   providers: [],
   bootstrap: [AppComponent]

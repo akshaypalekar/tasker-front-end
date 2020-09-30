@@ -1,6 +1,7 @@
 import { Injectable } from '@angular/core';
 import { BehaviorSubject } from 'rxjs';
 import { List } from '../../models/list-model/list.model';
+import { Router, ActivatedRoute } from '@angular/router';
 
 @Injectable({
   providedIn: 'root'
@@ -8,7 +9,7 @@ import { List } from '../../models/list-model/list.model';
 export class ListServiceService {
   private newList = new BehaviorSubject<List[]>([]);
 
-  constructor() { }
+  constructor(private router: Router, private route: ActivatedRoute) { }
   
   getNewListListner(){
     return this.newList.asObservable();
@@ -23,6 +24,7 @@ export class ListServiceService {
     let newListMenu = [...this.newList.value];
     newListMenu.push(list);
     this.newList.next(newListMenu);
+    this.router.navigate(['/list', listID]);
   }
 
 }

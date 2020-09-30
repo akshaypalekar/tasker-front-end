@@ -1,28 +1,23 @@
-<mat-toolbar color="primary">
-  <button
-    type="button"
-    aria-label="Toggle sidenav"
-    mat-icon-button
-    (click)="drawer.toggle()"
-    *ngIf="isHandset$ | async">
-    <mat-icon aria-label="Side nav toggle icon">menu</mat-icon>
-  </button>
-  <!-- <span>Tasker</span> -->
-  <img src="../../../assets/images/tasker_logo.png" width="140" height="140">
+<div class="example-container">
+  <mat-toolbar color="primary">
+    <button type="button" aria-label="Toggle sidenav" mat-icon-button (click)="drawer.toggle()"
+      *ngIf="isHandset$ | async">
+      <mat-icon aria-label="Side nav toggle icon">menu</mat-icon>
+    </button>
+    <img src="../../../assets/images/tasker_logo_new.png" width="140" height="140">
+  </mat-toolbar>
 
-</mat-toolbar>
-
-<mat-sidenav-container class="sidenav-container">
-  <mat-sidenav #drawer class="sidenav"
-      [attr.role]="(isHandset$ | async) ? 'dialog' : 'navigation'"
-      [mode]="(isHandset$ | async) ? 'over' : 'side'"
-      [opened]="(isHandset$ | async) === false">
-    <app-create-list-button></app-create-list-button>
-    <mat-nav-list>
-      <app-list-menu></app-list-menu>
-    </mat-nav-list>
-  </mat-sidenav>
-  <mat-sidenav-content>
-        <app-task-creat></app-task-creat>
-  </mat-sidenav-content>
-</mat-sidenav-container>
+  <mat-sidenav-container class="sidenav-container">
+    <mat-sidenav #drawer class="sidenav" [attr.role]="(isHandset$ | async) ? 'dialog' : 'navigation'"
+      [mode]="(isHandset$ | async) ? 'over' : 'side'" [opened]="(isHandset$ | async) === false">
+      <app-create-list-button></app-create-list-button>
+      <mat-nav-list>
+        <app-list-menu></app-list-menu>
+      </mat-nav-list>
+    </mat-sidenav>
+    <mat-sidenav-content>
+      <router-outlet></router-outlet>
+      <router-outlet name="secondary"></router-outlet>
+    </mat-sidenav-content>
+  </mat-sidenav-container>
+</div>

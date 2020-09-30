@@ -1,3 +1,3 @@
 <div cdkDropList class="example-list" (cdkDropListDropped)="drop($event)">
-    <div class="example-box" *ngFor="let list of listMenu" cdkDrag>{{list.listName}}</div>
+    <div class="example-box" *ngFor="let list of listMenu" [routerLink]="['/list',list.id]" cdkDrag>{{list.listName}}</div>
 </div>
