@@ -5,6 +5,7 @@ import { Subscription } from 'rxjs';
 import { TaskServiceService } from '../../../services/task-service/task-service.service';
 import { ActivatedRoute } from '@angular/router';
 import { MatDialog } from '@angular/material/dialog';
+import {MatSnackBar} from '@angular/material/snack-bar';
 import { TaskDeleteDialogComponent } from 'src/app/dialog/task-delete-dialog/task-delete-dialog.component';
 
 
@@ -19,7 +20,7 @@ export class TaskListComponent implements OnInit, OnDestroy {
   private taskSub: Subscription; //Create a subscription to listen to changes in array
   selectedListId: number;
 
-  constructor(public taskService: TaskServiceService, private route: ActivatedRoute) { }
+  constructor(public taskService: TaskServiceService, private route: ActivatedRoute, public dialog: MatDialog, private _snackBar: MatSnackBar) { }
 
   //Function to get any items when the component is created
   ngOnInit(): void {
@@ -37,11 +38,11 @@ export class TaskListComponent implements OnInit, OnDestroy {
     });
   }
 
-  /*
+  
   //Delete Modal
   openDeleteModal(taskId: number): void {
     const dialogRef = this.dialog.open(TaskDeleteDialogComponent, {
-      width: '250px',
+      width: '350px',
       data: {
         element: 'task'
       }
@@ -50,17 +51,17 @@ export class TaskListComponent implements OnInit, OnDestroy {
     dialogRef.afterClosed().subscribe(result => {
       if (result == true) {
         this.taskService.deleteTask(taskId);
-        this.openSnackBar();
+        this.openSnackBar('Task Deleted','Dismiss');
       }
     });
   }
 
-  openSnackBar(): void {
-    this._snackBar.open('Task Deleted', 'Dismiss', {
+  openSnackBar(message: string, action: string) {
+    this._snackBar.open(message, action, {
       duration: 2000,
     });
   }
-*/
+
   //Destroy the subscription after the component is destroyed
   ngOnDestroy(): void {
   }

@@ -29,7 +29,6 @@ export class TaskServiceService {
       priority:'Medium',
       dueDate:new Date()
     }
-    console.log(task);
     let newTaskList = [...this.updatedTasks.value];
     newTaskList.push(task);
     this.updatedTasks.next(newTaskList);
@@ -41,4 +40,12 @@ export class TaskServiceService {
     newTaskList = newTaskList.filter(el => el.id != taskId);
     this.updatedTasks.next(newTaskList);
   }
+
+  deleteTaskWithListID(listId: number){
+    let newTaskList = [...this.updatedTasks.value];
+    newTaskList = newTaskList.filter(el => el.listId != listId);
+    this.updatedTasks.next(newTaskList);
+  }
+
+
 }

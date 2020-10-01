@@ -27,4 +27,18 @@ export class ListServiceService {
     this.router.navigate(['/list', listID]);
   }
 
+  //Delete a task
+  deleteList(listId: number) {
+    let newListMenu = [...this.newList.value];
+    newListMenu = newListMenu.filter(el => el.id != listId);
+    this.newList.next(newListMenu);
+    //If there are no lists remaining then display empty container
+    if(this.newList.value.length == 0){
+      this.router.navigate(['']);
+    }else{
+      this.router.navigate(['/list', this.newList.value[0].id]);
+    }
+  
+  }
+
 }

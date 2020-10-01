@@ -25,6 +25,9 @@ import { EmptyContainerComponent } from './components/main-container/empty-conta
 import {MatCardModule} from '@angular/material/card';
 import { WrapperContainerComponent } from './components/main-container/wrapper-container/wrapper-container.component';
 import { TaskDeleteDialogComponent } from './dialog/task-delete-dialog/task-delete-dialog.component';
+import {MatSnackBarModule} from '@angular/material/snack-bar';
+import {MatMenuModule} from '@angular/material/menu';
+import { ListEditDialogComponent } from './dialog/list-edit-dialog/list-edit-dialog.component';
 
 
 @NgModule({
@@ -39,6 +42,7 @@ import { TaskDeleteDialogComponent } from './dialog/task-delete-dialog/task-dele
     EmptyContainerComponent,
     WrapperContainerComponent,
     TaskDeleteDialogComponent,
+    ListEditDialogComponent,
   ],
   imports: [
     BrowserModule,
@@ -55,7 +59,9 @@ import { TaskDeleteDialogComponent } from './dialog/task-delete-dialog/task-dele
     FormsModule,
     MatInputModule,
     MatGridListModule,
-    MatCardModule
+    MatCardModule,
+    MatSnackBarModule,
+    MatMenuModule
   ],
   providers: [],
   bootstrap: [AppComponent]

@@ -4,8 +4,8 @@ import { WrapperContainerComponent } from './components/main-container/wrapper-c
 import { EmptyContainerComponent } from './components/main-container/empty-container/empty-container.component';
 
 const routes: Routes = [
-  { path: '', component:  EmptyContainerComponent },
-  { path: 'list/:id', component:WrapperContainerComponent }
+  { path: '', component:  EmptyContainerComponent},
+  { path: 'list/:id', component:WrapperContainerComponent },
 ];
 
 @NgModule({
