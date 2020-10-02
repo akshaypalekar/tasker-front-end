@@ -27,7 +27,8 @@ export class TaskServiceService {
       description:'',
       status:'Draft',
       priority:'Medium',
-      dueDate:new Date()
+      dueDate: new Date(),
+      complete: false
     }
     let newTaskList = [...this.updatedTasks.value];
     newTaskList.push(task);

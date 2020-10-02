@@ -13,21 +13,27 @@ import { MatIconModule } from '@angular/material/icon';
 import { MatListModule } from '@angular/material/list';
 import { CreateListButtonComponent } from './components/sidebar/create-list/create-list-button/create-list-button.component';
 import { ListMenuComponent } from './components/sidebar/list-menu/list-menu/list-menu.component';
-import {DragDropModule} from '@angular/cdk/drag-drop';
-import {MatDialogModule} from '@angular/material/dialog';
+import { DragDropModule } from '@angular/cdk/drag-drop';
+import { MatDialogModule} from '@angular/material/dialog';
 import { ListCreateDialogComponent } from './dialog/list-create-dialog/list-create-dialog.component';
 import { FormsModule } from '@angular/forms';
 import { MatInputModule } from '@angular/material/input';
 import { TaskCreatComponent } from './components/main-container/task-creat/task-creat.component';
-import {MatGridListModule} from '@angular/material/grid-list';
+import { MatGridListModule} from '@angular/material/grid-list';
 import { TaskListComponent } from './components/main-container/task-list/task-list.component';
 import { EmptyContainerComponent } from './components/main-container/empty-container/empty-container.component';
-import {MatCardModule} from '@angular/material/card';
+import { MatCardModule} from '@angular/material/card';
 import { WrapperContainerComponent } from './components/main-container/wrapper-container/wrapper-container.component';
 import { TaskDeleteDialogComponent } from './dialog/task-delete-dialog/task-delete-dialog.component';
-import {MatSnackBarModule} from '@angular/material/snack-bar';
-import {MatMenuModule} from '@angular/material/menu';
+import { MatSnackBarModule } from '@angular/material/snack-bar';
+import { MatMenuModule} from '@angular/material/menu';
 import { ListEditDialogComponent } from './dialog/list-edit-dialog/list-edit-dialog.component';
+import { TaskEditDialogComponent } from './dialog/task-edit-dialog/task-edit-dialog.component';
+import { MatSelectModule } from '@angular/material/select';
+import { MatDatepickerModule } from '@angular/material/datepicker';
+import {MatNativeDateModule} from '@angular/material/core';
+import { MatCheckboxModule } from '@angular/material/checkbox';
+
 
 
 @NgModule({
@@ -43,6 +49,7 @@ import { ListEditDialogComponent } from './dialog/list-edit-dialog/list-edit-dia
     WrapperContainerComponent,
     TaskDeleteDialogComponent,
     ListEditDialogComponent,
+    TaskEditDialogComponent
   ],
   imports: [
     BrowserModule,
@@ -61,7 +68,11 @@ import { ListEditDialogComponent } from './dialog/list-edit-dialog/list-edit-dia
     MatGridListModule,
     MatCardModule,
     MatSnackBarModule,
-    MatMenuModule
+    MatMenuModule,
+    MatSelectModule,
+    MatDatepickerModule,
+    MatNativeDateModule,
+    MatCheckboxModule
   ],
   providers: [],
   bootstrap: [AppComponent]

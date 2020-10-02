@@ -3,7 +3,8 @@ export class Task {
     listId: number;
     todo: string;
     description: string;
-    status: string;
     priority: string;
     dueDate: Date;
+    status: string;
+    complete: boolean;
 }

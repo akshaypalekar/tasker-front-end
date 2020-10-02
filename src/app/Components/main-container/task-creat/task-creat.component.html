@@ -2,8 +2,7 @@
     <form (submit)="onSubmit(taskForm)" #taskForm="ngForm">
         <div class="form-row align-items-center">
             <div class="col-xs-12 col-lg-11">
-                <input type="text" class="form-control mb-2" id="inlineFormInput" placeholder="Lets do something great today..."  ngModel
-                name="taskInputField" #taskField="ngModel" required>
+                <input type="text" maxlength="60" class="form-control mb-2" id="inlineFormInput" placeholder="Whats up ?" ngModel name="taskInputField" #taskField="ngModel" required>
             </div>
             <div class="col-xs-12 col-lg-1">
                 <button mat-raised-button color="primary" class="btn btn-primary mb-2">Add Task</button>

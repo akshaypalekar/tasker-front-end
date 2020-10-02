@@ -7,6 +7,7 @@ import { ActivatedRoute } from '@angular/router';
 import { MatDialog } from '@angular/material/dialog';
 import {MatSnackBar} from '@angular/material/snack-bar';
 import { TaskDeleteDialogComponent } from 'src/app/dialog/task-delete-dialog/task-delete-dialog.component';
+import { TaskEditDialogComponent } from 'src/app/dialog/task-edit-dialog/task-edit-dialog.component';
 
 
 @Component({
@@ -15,7 +16,7 @@ import { TaskDeleteDialogComponent } from 'src/app/dialog/task-delete-dialog/tas
   styleUrls: ['./task-list.component.css']
 })
 export class TaskListComponent implements OnInit, OnDestroy {
-
+  
   taskList: Task[] = []; //Local array to store the list items
   private taskSub: Subscription; //Create a subscription to listen to changes in array
   selectedListId: number;
@@ -38,8 +39,51 @@ export class TaskListComponent implements OnInit, OnDestroy {
     });
   }
 
+  onCompleteCheck(taskId: number): void {
+    console.log("I'm walking over here");
+  }
+
+  //Edit Dialog
+  openEditModal(task: any):void {
+    const dialogRef = this.dialog.open(TaskEditDialogComponent, {
+      width: '350px',
+      data: {
+        taskText: task.todo,
+        taskDescription: task.description,
+        taskPriority: task.priority,
+        taskDueDate: task.dueDate,
+        taskStatus: task.status
+      }
+    });
+
+    dialogRef.afterClosed().subscribe(result => {
+      if (result != undefined) {
+        for (let i in this.taskList) {
+          if (this.taskList[i].id == task.id) {
+            
+            if(this.taskList[i].todo != result.taskText){
+              this.taskList[i].todo = result.taskText;
+            }
+            if(this.taskList[i].description != result.taskDescription){
+              this.taskList[i].description = result.taskDescription;
+            }
+            if(this.taskList[i].priority != result.taskPriority){
+              this.taskList[i].priority = result.taskPriority;
+            }
+            if(this.taskList[i].dueDate != result.taskDueDate){
+              this.taskList[i].dueDate = result.taskDueDate;
+            }
+            if(this.taskList[i].status != result.taskStatus){
+              this.taskList[i].status = result.taskStatus;
+            }
+          }
+        }
+      }
+    });
+  }
+
   
-  //Delete Modal
+  //Delete Dialog
   openDeleteModal(taskId: number): void {
     const dialogRef = this.dialog.open(TaskDeleteDialogComponent, {
       width: '350px',

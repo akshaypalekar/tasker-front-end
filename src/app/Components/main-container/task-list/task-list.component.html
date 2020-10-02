@@ -1,31 +1,32 @@
-<div class="container-fluid">
-    <div cdkDropList class="example-list" (cdkDropListDropped)="drop($event)">
-        <div class="example-box" *ngFor="let task of taskList" cdkDrag>
-            <div class="example-custom-placeholder" *cdkDragPlaceholder></div>
-            <div class="row">
-                <div class="col-sm-9 task-text">
-                    <span class="material-icons ">drag_indicator</span> {{task.todo}}
-                </div>
+<div cdkDropList class="container example-list" (cdkDropListDropped)="drop($event)">
+    <div class="row example-box" *ngFor="let task of taskList" cdkDrag>
+        <div class="example-custom-placeholder" *cdkDragPlaceholder></div>
 
-                <div class="col-sm-3 task-options">
-                    <span *ngIf="task.priority == 'Low'" matTooltip="Priority" class="badge badge-pill low-priority">Low</span>
-                    <span *ngIf="task.priority == 'Medium'" matTooltip="Priority" class="badge badge-pill medium-priority">Medium</span>
-                    <span *ngIf="task.priority == 'High'" matTooltip="Priority" class="badge badge-pill high-priority">High</span>
-                    <span *ngIf="task.priority == 'Critical'" matTooltip="Priority" class="badge badge-pill critical-priority">Critical</span>
-
-                    <span matTooltip="Due Date" class="dueDate">{{task.dueDate.toLocaleString('default', {month: 'long'}) + ' ' + task.dueDate.getDate() + ', ' + task.dueDate.getFullYear() }}</span>
-
-                    <span *ngIf="task.status == 'Draft'" matTooltip="Status" class="badge badge-secondary draft-status">Draft</span>
-                    <span *ngIf="task.status == 'Wip'" matTooltip="Status" class="badge badge-secondary wip-status">Work in Progress</span>
-                    <span *ngIf="task.status == 'Done'" matTooltip="Status" class="badge badge-secondary done-status">Done</span>
-                    <span *ngIf="task.status == 'Stuck'" matTooltip="Status" class="badge badge-secondary stuck-status">Stuck</span>
-                    <span *ngIf="task.status == 'Hold'" matTooltip="Status" class="badge badge-secondary hold-status">Hold</span>
-
-
-                    <span matTooltip="Edit" class="material-icons edit" (click)="openEditModal(task)">edit</span>
-                    <span class="material-icons delete" (click)="openDeleteModal(task.id)">delete</span>
-                </div>
-            </div>
+        <div class="col-lg-6 col-md-6 col-xs-12 col-12 task-text-box">
+            <mat-checkbox class="example-margin" [(ngModel)]="task.complete" (click)="onCompleteCheck(task.id)"></mat-checkbox>
+            <span>{{task.todo}}</span>
         </div>
+
+        <div *ngIf="task.status == 'Draft'" class="col-lg-2 col-md-2 col-sm-3 col-xs-3 col-3 status-box" style="background-color: #95A5A6;">Draft</div>
+        <div *ngIf="task.status == 'Work In Progress'" class="col-lg-2 col-md-2 col-sm-3 col-xs-3 col-3 status-box" style="background-color: #0099ff;">Work In Progress</div>
+        <div *ngIf="task.status == 'Done'" class="col-lg-2 col-md-2 col-sm-3 col-xs-3 col-3 status-box" style="background-color: #58D68D;">Done</div>
+        <div *ngIf="task.status == 'Stuck'" class="col-lg-2 col-md-2 col-sm-3 col-xs-3 col-3 status-box" style="background-color: Red;">Stuck</div>
+        <div *ngIf="task.status == 'Hold'" class="col-lg-2 col-md-2 col-sm-3 col-xs-3 col-3 status-box" style="background-color: #666699;">Hold</div>
+        <div *ngIf="task.status == 'Ready for Review'" class="col-lg-2 col-md-2 col-sm-3 col-xs-3 col-3 status-box" style="background-color: #cbaf87;">Ready for Review</div>
+
+        <div class="col-lg-2 col-md-2 col-sm-4 col-xs-4 col-4 due-date-box">
+            <span matTooltip="Due Date" class="dueDate">{{task.dueDate.toLocaleString('default', {month: 'short'}) + ' ' + task.dueDate.getDate() + ', ' + task.dueDate.getFullYear() }}</span>
+        </div>
+
+        <div *ngIf="task.priority == 'Low'" class="col-lg-1 col-md-1 col-sm-3 col-xs-3 col-3 priority-box" style="background-color: #7FB3D5;">Low</div>
+        <div *ngIf="task.priority == 'Medium'" class="col-lg-1 col-md-1 col-sm-3 col-xs-3 col-3 priority-box" style="background-color: Orange;">Medium</div>
+        <div *ngIf="task.priority == 'High'" class="col-lg-1 col-md-1 col-sm-3 col-xs-3 col-3 priority-box" style="background-color: #f2d600;">High</div>
+        <div *ngIf="task.priority == 'Critical'" class="col-lg-1 col-md-1 col-sm-3 col-xs-3 col-3 priority-box" style="background-color: #E74C3C;">Critical</div>
+
+        <div class="col-lg-1 col-md-1 col-sm-2 col-xs-2 col-2 action-box">
+            <span matTooltip="Edit" class="material-icons edit" (click)="openEditModal(task)">edit</span>
+            <span matTooltip="Delete" class="material-icons delete" (click)="openDeleteModal(task.id)">delete</span>
+        </div>
+
     </div>
 </div>
