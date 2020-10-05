@@ -51,7 +51,6 @@ export class TaskListComponent implements OnInit, OnDestroy {
   }
 
   getBorderColor(priority:string){
-    console.log("Komal");
     if(priority == 'Low'){
       return 'solid 5px #3c78d8';
     }

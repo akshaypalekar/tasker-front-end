@@ -6,14 +6,16 @@ import { PageNotFoundContainerComponent } from './components/main-container/page
 
 
 const routes: Routes = [
-  { path: '', component:  EmptyContainerComponent},
-  { path: 'list/:id', component:WrapperContainerComponent },
-  { path: '**', component:PageNotFoundContainerComponent },  // Wildcard route for a 404 page
+  { path: 'list/:id', component: WrapperContainerComponent },
+  { path: '', component: EmptyContainerComponent },
+  { path: '**', component: PageNotFoundContainerComponent },  // Wildcard route for a 404 page
 
 ];
 
+
+
 @NgModule({
-  imports: [RouterModule.forRoot(routes)],
+  imports: [RouterModule.forRoot(routes,  { enableTracing: true })],
   exports: [RouterModule]
 })
 export class AppRoutingModule { }
