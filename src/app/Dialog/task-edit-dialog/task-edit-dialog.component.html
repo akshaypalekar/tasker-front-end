@@ -36,14 +36,17 @@
         <mat-datepicker #duedatepicker color="primary"></mat-datepicker>
     </mat-form-field>
 
+    <div *ngIf="data.taskComplete == true" class="alert alert-info" role="alert">
+        Cannot edit status when task is complete
+    </div>
     <mat-form-field appearance="outline">
         <mat-label>Status</mat-label>
-        <mat-select [(value)]="data.taskStatus">
-            <mat-option value="Draft">
+        <mat-select [(value)]="data.taskStatus" [disabled]="data.taskComplete == true">
+            <mat-option value="Ready">
                 <div class="option">Draft<span class="draft-dot"></span></div>
             </mat-option>
-            <mat-option value="Work In Progress">
-                <div class="option">Work In Progress<span class="wip-dot"></span></div>
+            <mat-option value="In Progress">
+                <div class="option">In Progress<span class="wip-dot"></span></div>
             </mat-option>
             <mat-option value="Done">
                 <div class="option">Done<span class="done-dot"></span></div>
@@ -51,11 +54,8 @@
             <mat-option value="Stuck">
                 <div class="option">Stuck<span class="stuck-dot"></span></div>
             </mat-option>
-            <mat-option value="On Hold">
+            <mat-option value="Hold">
                 <div class="option">On Hold<span class="onHold-dot"></span></div>
-            </mat-option>
-            <mat-option value="Ready for Review">
-                <div class="option">Ready for Review<span class="onHold-dot"></span></div>
             </mat-option>
         </mat-select>
     </mat-form-field>

@@ -33,6 +33,8 @@ import { MatSelectModule } from '@angular/material/select';
 import { MatDatepickerModule } from '@angular/material/datepicker';
 import {MatNativeDateModule} from '@angular/material/core';
 import { MatCheckboxModule } from '@angular/material/checkbox';
+import { MatDividerModule } from '@angular/material/divider';
+import { PageNotFoundContainerComponent } from './components/main-container/page-not-found-container/page-not-found-container.component';
 
 
 
@@ -49,7 +51,8 @@ import { MatCheckboxModule } from '@angular/material/checkbox';
     WrapperContainerComponent,
     TaskDeleteDialogComponent,
     ListEditDialogComponent,
-    TaskEditDialogComponent
+    TaskEditDialogComponent,
+    PageNotFoundContainerComponent
   ],
   imports: [
     BrowserModule,
@@ -72,7 +75,8 @@ import { MatCheckboxModule } from '@angular/material/checkbox';
     MatSelectModule,
     MatDatepickerModule,
     MatNativeDateModule,
-    MatCheckboxModule
+    MatCheckboxModule,
+    MatDividerModule
   ],
   providers: [],
   bootstrap: [AppComponent]

@@ -1,10 +1,10 @@
-<h1 mat-dialog-title>What do you want to call the list ?</h1>
+<h1 mat-dialog-title>List Name</h1>
 <div mat-dialog-content>
-  <mat-form-field appearance="outline">
-    <input cdkFocusInitial matInput [(ngModel)]="data.listName">
-  </mat-form-field>
+    <mat-form-field appearance="outline">
+        <input cdkFocusInitial matInput placeholder="List Name" maxlength="60" [(ngModel)]="data.listName">
+    </mat-form-field>
 </div>
 <div mat-dialog-actions class="action-buttons">
-  <button mat-raised-button (click)="onNoClick()">Cancel</button>
-  <button mat-raised-button color="primary" [mat-dialog-close]="data.listName" cdkFocusInitial>Ok</button>
+    <button mat-raised-button (click)="onNoClick()">Cancel</button>
+    <button mat-raised-button color="primary" [mat-dialog-close]="data.listName" cdkFocusInitial>Ok</button>
 </div>

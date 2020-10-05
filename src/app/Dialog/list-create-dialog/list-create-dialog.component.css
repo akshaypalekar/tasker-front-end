@@ -1,7 +1,11 @@
-.mat-form-field{
+.mat-form-field {
     display: inline;
 }
 
 .action-buttons {
     justify-content: center;
+}
+
+h1 {
+    text-align: center;
 }

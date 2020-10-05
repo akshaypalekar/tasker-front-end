@@ -1,3 +1,7 @@
+h1 {
+    text-align: center;
+}
+
 .mat-form-field {
     display: inline;
 }
@@ -18,7 +22,7 @@
 .low-dot {
     height: 15px;
     width: 15px;
-    background-color: #7FB3D5;
+    background-color: #3c78d8;
     border-radius: 50%;
     display: inline-block;
 }
@@ -26,7 +30,7 @@
 .medium-dot {
     height: 15px;
     width: 15px;
-    background-color: orange;
+    background-color: #6aa84f;
     border-radius: 50%;
     display: inline-block;
 }
@@ -34,7 +38,7 @@
 .high-dot {
     height: 15px;
     width: 15px;
-    background-color: #F7DC6F;
+    background-color: #e77f11;
     border-radius: 50%;
     display: inline-block;
 }
@@ -42,7 +46,7 @@
 .critical-dot {
     height: 15px;
     width: 15px;
-    background-color: #E74C3C;
+    background-color: #cc0000;
     border-radius: 50%;
     display: inline-block;
 }
@@ -53,7 +57,7 @@
 .draft-dot {
     height: 15px;
     width: 15px;
-    background-color: #95A5A6;
+    background-color: #dfa800;
     border-radius: 50%;
     display: inline-block;
 }
@@ -61,7 +65,7 @@
 .wip-dot {
     height: 15px;
     width: 15px;
-    background-color: #0099ff;
+    background-color: #1155cc;
     border-radius: 50%;
     display: inline-block;
 }
@@ -69,7 +73,7 @@
 .done-dot {
     height: 15px;
     width: 15px;
-    background-color: #58D68D;
+    background-color: #38761d;
     border-radius: 50%;
     display: inline-block;
 }
@@ -77,7 +81,7 @@
 .stuck-dot {
     height: 15px;
     width: 15px;
-    background-color: Red;
+    background-color: #990000;
     border-radius: 50%;
     display: inline-block;
 }
@@ -85,7 +89,11 @@
 .onHold-dot {
     height: 15px;
     width: 15px;
-    background-color: #666699;
+    background-color: #741b47;
     border-radius: 50%;
     display: inline-block;
+}
+
+alert-info {
+    font-size: 10px;
 }

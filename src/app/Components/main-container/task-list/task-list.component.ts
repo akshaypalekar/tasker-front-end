@@ -5,7 +5,7 @@ import { Subscription } from 'rxjs';
 import { TaskServiceService } from '../../../services/task-service/task-service.service';
 import { ActivatedRoute } from '@angular/router';
 import { MatDialog } from '@angular/material/dialog';
-import {MatSnackBar} from '@angular/material/snack-bar';
+import { MatSnackBar } from '@angular/material/snack-bar';
 import { TaskDeleteDialogComponent } from 'src/app/dialog/task-delete-dialog/task-delete-dialog.component';
 import { TaskEditDialogComponent } from 'src/app/dialog/task-edit-dialog/task-edit-dialog.component';
 
@@ -16,10 +16,14 @@ import { TaskEditDialogComponent } from 'src/app/dialog/task-edit-dialog/task-ed
   styleUrls: ['./task-list.component.css']
 })
 export class TaskListComponent implements OnInit, OnDestroy {
-  
+
   taskList: Task[] = []; //Local array to store the list items
+  completedTaskList: Task[] = [];
   private taskSub: Subscription; //Create a subscription to listen to changes in array
+  private compTaskSub: Subscription;
   selectedListId: number;
+  public taskCompleteClass:string;
+  public boxClass = 'row example-box';
 
   constructor(public taskService: TaskServiceService, private route: ActivatedRoute, public dialog: MatDialog, private _snackBar: MatSnackBar) { }
 
@@ -37,14 +41,44 @@ export class TaskListComponent implements OnInit, OnDestroy {
         return el.listId == selectedListId;
       });
     });
+
+    this.compTaskSub = this.taskService.getCompleteTaskUpdateListner().subscribe((tasks: Task[]) => {
+      this.completedTaskList = tasks.filter((el) => {
+        return el.listId == selectedListId;
+      });
+    });
+
   }
 
-  onCompleteCheck(taskId: number): void {
-    console.log("I'm walking over here");
+  getBorderColor(priority:string){
+    console.log("Komal");
+    if(priority == 'Low'){
+      return 'solid 5px #3c78d8';
+    }
+    if(priority == 'Medium'){
+      return 'solid 5px #6aa84f';
+    }
+    if(priority == 'High'){
+      return 'solid 5px #e69138';
+    }
+    if(priority == 'Critical'){
+      return 'solid 5px #cc0000';
+    }
+  }
+
+  //Push tasks in completed list
+  onCompleteCheck(task: any): void {
+    this.taskService.setTaskToComplete(task);
+    this.openSnackBar('Task Completed', 'Dismiss');
+  }
+
+  restoreTask(task: any): void {
+    this.taskService.setTaskBackToIncomplete(task);
+    this.openSnackBar('Task Restored', 'Dismiss');
   }
 
   //Edit Dialog
-  openEditModal(task: any):void {
+  openEditModal(task: any): void {
     const dialogRef = this.dialog.open(TaskEditDialogComponent, {
       width: '350px',
       data: {
@@ -52,39 +86,64 @@ export class TaskListComponent implements OnInit, OnDestroy {
         taskDescription: task.description,
         taskPriority: task.priority,
         taskDueDate: task.dueDate,
-        taskStatus: task.status
+        taskStatus: task.status,
+        taskComplete: task.complete
       }
     });
 
     dialogRef.afterClosed().subscribe(result => {
+      console.log(result);
       if (result != undefined) {
-        for (let i in this.taskList) {
-          if (this.taskList[i].id == task.id) {
-            
-            if(this.taskList[i].todo != result.taskText){
-              this.taskList[i].todo = result.taskText;
+        if (!result.taskComplete) {
+          for (let i in this.taskList) {
+            if (this.taskList[i].id == task.id) {
+
+              if (this.taskList[i].todo != result.taskText) {
+                this.taskList[i].todo = result.taskText;
+              }
+              if (this.taskList[i].description != result.taskDescription) {
+                this.taskList[i].description = result.taskDescription;
+              }
+              if (this.taskList[i].priority != result.taskPriority) {
+                this.taskList[i].priority = result.taskPriority;
+              }
+              if (this.taskList[i].dueDate != result.taskDueDate) {
+                this.taskList[i].dueDate = result.taskDueDate;
+              }
+              if (this.taskList[i].status != result.taskStatus) {
+                this.taskList[i].status = result.taskStatus;
+              }
             }
-            if(this.taskList[i].description != result.taskDescription){
-              this.taskList[i].description = result.taskDescription;
-            }
-            if(this.taskList[i].priority != result.taskPriority){
-              this.taskList[i].priority = result.taskPriority;
-            }
-            if(this.taskList[i].dueDate != result.taskDueDate){
-              this.taskList[i].dueDate = result.taskDueDate;
-            }
-            if(this.taskList[i].status != result.taskStatus){
-              this.taskList[i].status = result.taskStatus;
+          }
+        }else {
+          for (let i in this.completedTaskList) {
+            if (this.completedTaskList[i].id == task.id) {
+  
+              if (this.completedTaskList[i].todo != result.taskText) {
+                this.completedTaskList[i].todo = result.taskText;
+              }
+              if (this.completedTaskList[i].description != result.taskDescription) {
+                this.completedTaskList[i].description = result.taskDescription;
+              }
+              if (this.completedTaskList[i].priority != result.taskPriority) {
+                this.completedTaskList[i].priority = result.taskPriority;
+              }
+              if (this.completedTaskList[i].dueDate != result.taskDueDate) {
+                this.completedTaskList[i].dueDate = result.taskDueDate;
+              }
+              if (this.completedTaskList[i].status != result.taskStatus) {
+                this.completedTaskList[i].status = result.taskStatus;
+              }
             }
           }
         }
-      }
+      } 
     });
   }
 
-  
+
   //Delete Dialog
-  openDeleteModal(taskId: number): void {
+  openDeleteModal(taskId: number, taskState: boolean): void {
     const dialogRef = this.dialog.open(TaskDeleteDialogComponent, {
       width: '350px',
       data: {
@@ -94,8 +153,12 @@ export class TaskListComponent implements OnInit, OnDestroy {
 
     dialogRef.afterClosed().subscribe(result => {
       if (result == true) {
+        if(!taskState){
         this.taskService.deleteTask(taskId);
-        this.openSnackBar('Task Deleted','Dismiss');
+        }else{
+          this.taskService.deleteTaskfromComplete(taskId);
+        }
+        this.openSnackBar('Task Deleted', 'Dismiss');
       }
     });
   }
