@@ -584,7 +584,6 @@ class TaskListComponent {
             }
         });
         dialogRef.afterClosed().subscribe(result => {
-            console.log(result);
             if (result != undefined) {
                 if (!result.taskComplete) {
                     for (let i in this.taskList) {
@@ -629,6 +628,7 @@ class TaskListComponent {
                     }
                 }
             }
+            this.openSnackBar('Task Updated', 'Dismiss');
         });
     }
     //Delete Dialog
@@ -1494,7 +1494,6 @@ class TaskServiceService {
         this.updatedTasks.next(newTaskList);
     }
     deleteTaskWithListID(listId) {
-        console.log(listId);
         let newTaskList = [...this.completedTasks.value];
         newTaskList = newTaskList.filter(el => el.listId != listId);
         this.completedTasks.next(newTaskList);
