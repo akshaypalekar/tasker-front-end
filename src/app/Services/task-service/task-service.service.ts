@@ -48,7 +48,6 @@ export class TaskServiceService {
   }
 
   deleteTaskWithListID(listId: number){
-    console.log(listId);
     let newTaskList = [...this.completedTasks.value];
     newTaskList = newTaskList.filter(el => el.listId != listId);
     this.completedTasks.next(newTaskList);

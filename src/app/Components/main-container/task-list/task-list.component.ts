@@ -91,7 +91,6 @@ export class TaskListComponent implements OnInit, OnDestroy {
     });
 
     dialogRef.afterClosed().subscribe(result => {
-      console.log(result);
       if (result != undefined) {
         if (!result.taskComplete) {
           for (let i in this.taskList) {
@@ -136,7 +135,8 @@ export class TaskListComponent implements OnInit, OnDestroy {
             }
           }
         }
-      } 
+      }
+      this.openSnackBar('Task Updated', 'Dismiss');
     });
   }
 
