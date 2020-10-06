@@ -1,4 +1,4 @@
-![Logo of the project](https://github.com/akshaypalekar/tasker-front-end/tree/phase_1/src/assets/images)
+![Logo of the project](https://github.com/akshaypalekar/tasker-front-end/tree/phase_1/src/assets/images/tasker_logo_new.png)
 
 # Tasker
 
