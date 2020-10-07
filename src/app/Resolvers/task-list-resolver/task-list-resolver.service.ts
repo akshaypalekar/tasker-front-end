@@ -17,7 +17,7 @@ export class TaskListResolverService implements Resolve<number> {
     if(doesListExist){
       return urlListID;
     }else{
-      this.router.navigate(['']);
+      this.router.navigate(['/']);
     }
   }
 }
