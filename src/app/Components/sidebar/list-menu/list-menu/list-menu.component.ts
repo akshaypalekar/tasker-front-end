@@ -2,7 +2,7 @@ import { Component, OnInit, OnDestroy } from '@angular/core';
 import { CdkDragDrop, moveItemInArray } from '@angular/cdk/drag-drop';
 import { List } from '../../../../models/list-model/list.model'
 import { Subscription } from 'rxjs';
-import { ListServiceService } from 'src/app/Services/list-service/list-service.service';
+import { ListServiceService } from 'src/app/services/list-service/list-service.service';
 import { MatDialog, MatDialogRef, MAT_DIALOG_DATA } from '@angular/material/dialog';
 import { ListEditDialogComponent } from 'src/app/dialog/list-edit-dialog/list-edit-dialog.component';
 import { TaskDeleteDialogComponent } from 'src/app/dialog/task-delete-dialog/task-delete-dialog.component';
@@ -75,7 +75,7 @@ export class ListMenuComponent implements OnInit {
       if (result == true) {
         this.listService.deleteList(listItem.id);
         this.openSnackBar('List Deleted','Dismiss');
-        this.taskService.deleteTaskWithListID(listItem.id); //Delete all tasks that belong to that list 
+        this.taskService.deleteTaskWithListID(listItem.id); //Delete all tasks that belong to that list
       }
     });
   }

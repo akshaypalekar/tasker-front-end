@@ -22,7 +22,7 @@ export class TaskServiceService {
     return this.completedTasks.asObservable();
   }
 
-  //Adding a task
+  //Adding a tasks
   addTask(todo: string,selectedListId: number){
     const id = new Date().valueOf();
     const task: Task = {

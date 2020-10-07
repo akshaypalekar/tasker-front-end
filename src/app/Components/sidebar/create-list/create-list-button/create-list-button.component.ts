@@ -1,7 +1,7 @@
 import { Component, OnInit } from '@angular/core';
 import { MatDialog, MatDialogRef, MAT_DIALOG_DATA } from '@angular/material/dialog';
 import { ListCreateDialogComponent } from '../../../../dialog/list-create-dialog/list-create-dialog.component';
-import { ListServiceService } from 'src/app/Services/list-service/list-service.service';
+import { ListServiceService } from 'src/app/services/list-service/list-service.service';
 
 @Component({
   selector: 'app-create-list-button',

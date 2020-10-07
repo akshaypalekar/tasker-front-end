@@ -38,7 +38,15 @@ export class ListServiceService {
     }else{
       this.router.navigate(['/list', this.newList.value[0].id]);
     }
-  
+  }
+
+  //Checks if the list contains more than one list item, if not then return false
+  checkIfListExists(){
+     if(this.newList.value.length >= 1){
+       return true;
+     }else{
+       return false;
+     }
   }
 
 }
