@@ -1,13 +1,12 @@
 import { Injectable } from '@angular/core';
 import { ActivatedRouteSnapshot, Resolve, Router, RouterStateSnapshot } from '@angular/router';
-import { Observable, Subscription } from 'rxjs';
+import { Observable } from 'rxjs';
 import { ListServiceService } from '../../services/list-service/list-service.service';
 
 @Injectable({
   providedIn: 'root'
 })
 export class TaskListResolverService implements Resolve<number> {
-  private listItemSub: Subscription;
 
   constructor(public listService: ListServiceService, private router: Router) { }
   

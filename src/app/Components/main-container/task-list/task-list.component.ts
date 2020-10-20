@@ -1,14 +1,15 @@
 import { Component, OnInit, OnDestroy } from '@angular/core';
 import { CdkDragDrop, moveItemInArray } from '@angular/cdk/drag-drop';
 import { Task } from '../../../models/task-model/task.model';
-import { Subscription } from 'rxjs';
+import { combineLatest, Subscription } from 'rxjs';
 import { TaskServiceService } from '../../../services/task-service/task-service.service';
 import { ActivatedRoute } from '@angular/router';
 import { MatDialog } from '@angular/material/dialog';
 import { MatSnackBar } from '@angular/material/snack-bar';
-import { TaskDeleteDialogComponent } from 'src/app/dialog/task-delete-dialog/task-delete-dialog.component';
+import { DeleteConfirmationDialogComponent } from 'src/app/dialog/delete-confirmation-dialog/delete-confirmation-dialog.component';
 import { TaskEditDialogComponent } from 'src/app/dialog/task-edit-dialog/task-edit-dialog.component';
 import { TaskListResolverService } from 'src/app/resolvers/task-list-resolver/task-list-resolver.service';
+import { map, tap } from 'rxjs/operators';
 
 @Component({
   selector: 'app-task-list',
@@ -18,9 +19,8 @@ import { TaskListResolverService } from 'src/app/resolvers/task-list-resolver/ta
 export class TaskListComponent implements OnInit, OnDestroy {
   taskList: Task[] = []; //Local array to store the list items
   completedTaskList: Task[] = [];
-  private taskSub: Subscription; //Create a subscription to listen to changes in array
-  private compTaskSub: Subscription;
   selectedListId: number;
+  taskSub: Subscription;
   public taskCompleteClass: string;
   public boxClass = 'row example-box';
 
@@ -34,27 +34,17 @@ export class TaskListComponent implements OnInit, OnDestroy {
 
   //Function to get any items when the component is created
   ngOnInit(): void {
-    this.route.data.subscribe(data => {
-      this.getTaskList(data.id);
-    });
-  }
-
-  getTaskList(selectedListId: number): void {
-    this.taskSub = this.taskService
-      .getTaskUpdateListner()
-      .subscribe((tasks: Task[]) => {
-        this.taskList = tasks.filter((el) => {
-          return el.listId == selectedListId;
-        });
-      });
-
-    this.compTaskSub = this.taskService
-      .getCompleteTaskUpdateListner()
-      .subscribe((tasks: Task[]) => {
-        this.completedTaskList = tasks.filter((el) => {
-          return el.listId == selectedListId;
-        });
-      });
+    this.taskSub = combineLatest([this.taskService.getTaskUpdateListner(), this.route.data])
+      .pipe(
+        map(([tasks, routeData]) => {
+          return tasks.filter(task => task.listId == routeData.id)
+        }),
+        tap(tasks => {
+          this.taskList = tasks.filter(task => !task.complete)
+          this.completedTaskList = tasks.filter(task => task.complete)
+        })
+      )
+      .subscribe()
   }
 
   getBorderColor(priority: string) {
@@ -73,83 +63,34 @@ export class TaskListComponent implements OnInit, OnDestroy {
   }
 
   //Push tasks in completed list
-  onCompleteCheck(task: any): void {
-    this.taskService.setTaskToComplete(task);
+  onCompleteCheck(task: Task): void {
+    this.taskService.editTask(task.id, { complete: true });
     this.openSnackBar('Task Completed', 'Dismiss');
   }
 
-  restoreTask(task: any): void {
-    this.taskService.setTaskBackToIncomplete(task);
+  restoreTask(task: Task): void {
+    this.taskService.editTask(task.id, { complete: false });
     this.openSnackBar('Task Restored', 'Dismiss');
   }
 
   //Edit Dialog
-  openEditModal(task: any): void {
+  openEditModal(task: Task): void {
     const dialogRef = this.dialog.open(TaskEditDialogComponent, {
       width: '350px',
-      data: {
-        taskText: task.todo,
-        taskDescription: task.description,
-        taskPriority: task.priority,
-        taskDueDate: task.dueDate,
-        taskStatus: task.status,
-        taskComplete: task.complete,
-      },
+      data: { ...task }
     });
 
     dialogRef.afterClosed().subscribe((result) => {
       if (result != undefined) {
-        if (!result.taskComplete) {
-          for (let i in this.taskList) {
-            if (this.taskList[i].id == task.id) {
-              if (this.taskList[i].todo != result.taskText) {
-                this.taskList[i].todo = result.taskText;
-              }
-              if (this.taskList[i].description != result.taskDescription) {
-                this.taskList[i].description = result.taskDescription;
-              }
-              if (this.taskList[i].priority != result.taskPriority) {
-                this.taskList[i].priority = result.taskPriority;
-              }
-              if (this.taskList[i].dueDate != result.taskDueDate) {
-                this.taskList[i].dueDate = result.taskDueDate;
-              }
-              if (this.taskList[i].status != result.taskStatus) {
-                this.taskList[i].status = result.taskStatus;
-              }
-            }
-          }
-        } else {
-          for (let i in this.completedTaskList) {
-            if (this.completedTaskList[i].id == task.id) {
-              if (this.completedTaskList[i].todo != result.taskText) {
-                this.completedTaskList[i].todo = result.taskText;
-              }
-              if (
-                this.completedTaskList[i].description != result.taskDescription
-              ) {
-                this.completedTaskList[i].description = result.taskDescription;
-              }
-              if (this.completedTaskList[i].priority != result.taskPriority) {
-                this.completedTaskList[i].priority = result.taskPriority;
-              }
-              if (this.completedTaskList[i].dueDate != result.taskDueDate) {
-                this.completedTaskList[i].dueDate = result.taskDueDate;
-              }
-              if (this.completedTaskList[i].status != result.taskStatus) {
-                this.completedTaskList[i].status = result.taskStatus;
-              }
-            }
-          }
-        }
+        this.taskService.editTask(result.id, result)
       }
       this.openSnackBar('Task Updated', 'Dismiss');
     });
   }
 
   //Delete Dialog
-  openDeleteModal(taskId: number, taskState: boolean): void {
-    const dialogRef = this.dialog.open(TaskDeleteDialogComponent, {
+  openDeleteModal(taskId: number): void {
+    const dialogRef = this.dialog.open(DeleteConfirmationDialogComponent, {
       width: '350px',
       data: {
         element: 'task',
@@ -158,11 +99,7 @@ export class TaskListComponent implements OnInit, OnDestroy {
 
     dialogRef.afterClosed().subscribe((result) => {
       if (result == true) {
-        if (!taskState) {
-          this.taskService.deleteTask(taskId);
-        } else {
-          this.taskService.deleteTaskfromComplete(taskId);
-        }
+        this.taskService.deleteTask(taskId)
         this.openSnackBar('Task Deleted', 'Dismiss');
       }
     });
@@ -175,7 +112,9 @@ export class TaskListComponent implements OnInit, OnDestroy {
   }
 
   //Destroy the subscription after the component is destroyed
-  ngOnDestroy(): void {}
+  ngOnDestroy(): void {
+    this.taskSub.unsubscribe()
+  }
 
   //Logic for drag and drop of task items
   drop(event: CdkDragDrop<string[]>) {

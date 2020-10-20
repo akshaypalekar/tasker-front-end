@@ -29,8 +29,7 @@ export class ListServiceService {
 
   //Delete a task
   deleteList(listId: number) {
-    let newListMenu = [...this.newList.value];
-    newListMenu = newListMenu.filter(el => el.id != listId);
+    const newListMenu = this.newList.value.filter(el => el.id != listId);
     this.newList.next(newListMenu);
     //If there are no lists remaining then display empty container
     if(this.newList.value.length == 0){

@@ -3,9 +3,9 @@ import { CdkDragDrop, moveItemInArray } from '@angular/cdk/drag-drop';
 import { List } from '../../../../models/list-model/list.model'
 import { Subscription } from 'rxjs';
 import { ListServiceService } from 'src/app/services/list-service/list-service.service';
-import { MatDialog, MatDialogRef, MAT_DIALOG_DATA } from '@angular/material/dialog';
+import { MatDialog } from '@angular/material/dialog';
 import { ListEditDialogComponent } from 'src/app/dialog/list-edit-dialog/list-edit-dialog.component';
-import { TaskDeleteDialogComponent } from 'src/app/dialog/task-delete-dialog/task-delete-dialog.component';
+import { DeleteConfirmationDialogComponent } from 'src/app/dialog/delete-confirmation-dialog/delete-confirmation-dialog.component';
 import {MatSnackBar} from '@angular/material/snack-bar';
 import { TaskServiceService } from '../../../../services/task-service/task-service.service';
 
@@ -14,7 +14,7 @@ import { TaskServiceService } from '../../../../services/task-service/task-servi
   templateUrl: './list-menu.component.html',
   styleUrls: ['./list-menu.component.css']
 })
-export class ListMenuComponent implements OnInit {
+export class ListMenuComponent implements OnInit, OnDestroy {
 
   listMenu: List[] = []; //Local array to store the list items
   private listItemSub: Subscription; //Create a subscription to listen to changes in array
@@ -64,7 +64,7 @@ export class ListMenuComponent implements OnInit {
 
   //Delete Modal
   openDeleteDialog(listItem: any): void {
-    const dialogRef = this.dialog.open(TaskDeleteDialogComponent, {
+    const dialogRef = this.dialog.open(DeleteConfirmationDialogComponent, {
       width: '350px',
       data: {
         element: 'list'

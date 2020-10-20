@@ -8,3 +8,11 @@ export class Task {
     status: string;
     complete: boolean;
 }
+
+enum Prority {
+    
+}
+
+enum Status {
+    
+}
