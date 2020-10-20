@@ -24,7 +24,7 @@ import { TaskListComponent } from './components/main-container/task-list/task-li
 import { EmptyContainerComponent } from './components/main-container/empty-container/empty-container.component';
 import { MatCardModule} from '@angular/material/card';
 import { WrapperContainerComponent } from './components/main-container/wrapper-container/wrapper-container.component';
-import { TaskDeleteDialogComponent } from './dialog/task-delete-dialog/task-delete-dialog.component';
+import { DeleteConfirmationDialogComponent } from './dialog/delete-confirmation-dialog/delete-confirmation-dialog.component';
 import { MatSnackBarModule } from '@angular/material/snack-bar';
 import { MatMenuModule} from '@angular/material/menu';
 import { ListEditDialogComponent } from './dialog/list-edit-dialog/list-edit-dialog.component';
@@ -49,7 +49,7 @@ import { PageNotFoundContainerComponent } from './components/main-container/page
     TaskListComponent,
     EmptyContainerComponent,
     WrapperContainerComponent,
-    TaskDeleteDialogComponent,
+    DeleteConfirmationDialogComponent,
     ListEditDialogComponent,
     TaskEditDialogComponent,
     PageNotFoundContainerComponent

@@ -1,5 +1,5 @@
 import { Component, OnInit, Inject } from '@angular/core';
-import {MatDialog, MatDialogRef, MAT_DIALOG_DATA} from '@angular/material/dialog';
+import { MatDialogRef, MAT_DIALOG_DATA } from '@angular/material/dialog';
 import { List } from '../../models/list-model/list.model';
 
 @Component({
@@ -9,8 +9,7 @@ import { List } from '../../models/list-model/list.model';
 })
 export class ListCreateDialogComponent implements OnInit {
 
-  constructor( public dialogRef: MatDialogRef<ListCreateDialogComponent>,
-    @Inject(MAT_DIALOG_DATA) public data: List) { }
+  constructor( public dialogRef: MatDialogRef<ListCreateDialogComponent> ) { }
 
   ngOnInit(): void {
   }

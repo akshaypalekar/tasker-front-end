@@ -3,17 +3,17 @@
 
     <mat-form-field appearance="outline">
         <mat-label>Task</mat-label>
-        <input maxlength="100" matInput [(ngModel)]="data.taskText">
+        <input maxlength="100" matInput [(ngModel)]="task.todo">
     </mat-form-field>
 
     <mat-form-field appearance="outline">
         <mat-label>Description</mat-label>
-        <textarea matInput [(ngModel)]="data.taskDescription"></textarea>
+        <textarea matInput [(ngModel)]="task.description"></textarea>
     </mat-form-field>
 
     <mat-form-field appearance="outline">
         <mat-label>Priority</mat-label>
-        <mat-select [(value)]="data.taskPriority">
+        <mat-select [(value)]="task.priority">
             <mat-option value="Low">
                 <div class="option">Low<span class="low-dot"></span></div>
             </mat-option>
@@ -31,17 +31,17 @@
 
     <mat-form-field color="accent" appearance="outline">
         <mat-label>Due Date</mat-label>
-        <input matInput [matDatepicker]="duedatepicker" [(ngModel)]="data.taskDueDate">
+        <input matInput [matDatepicker]="duedatepicker" [(ngModel)]="task.dueDate">
         <mat-datepicker-toggle matSuffix [for]="duedatepicker"></mat-datepicker-toggle>
         <mat-datepicker #duedatepicker color="primary"></mat-datepicker>
     </mat-form-field>
 
-    <div *ngIf="data.taskComplete == true" class="alert alert-info" role="alert">
+    <div *ngIf="task.complete == true" class="alert alert-info" role="alert">
         Cannot edit status when task is complete
     </div>
     <mat-form-field appearance="outline">
         <mat-label>Status</mat-label>
-        <mat-select [(value)]="data.taskStatus" [disabled]="data.taskComplete == true">
+        <mat-select [(value)]="task.status" [disabled]="task.complete == true">
             <mat-option value="Ready">
                 <div class="option">Ready<span class="ready-dot"></span></div>
             </mat-option>
@@ -64,5 +64,5 @@
 </div>
 <div mat-dialog-actions class="action-buttons">
     <button mat-raised-button (click)="onNoClick()">Cancel</button>
-    <button mat-raised-button [mat-dialog-close]="data" cdkFocusInitial color="primary">Save Task</button>
+    <button mat-raised-button [mat-dialog-close]="task" cdkFocusInitial color="primary">Save Task</button>
 </div>

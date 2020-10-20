@@ -1,5 +1,5 @@
-import { Component, OnInit } from '@angular/core';
-import { MatDialog, MatDialogRef, MAT_DIALOG_DATA } from '@angular/material/dialog';
+import { Component } from '@angular/core';
+import { MatDialog } from '@angular/material/dialog';
 import { ListCreateDialogComponent } from '../../../../dialog/list-create-dialog/list-create-dialog.component';
 import { ListServiceService } from 'src/app/services/list-service/list-service.service';
 
@@ -8,21 +8,13 @@ import { ListServiceService } from 'src/app/services/list-service/list-service.s
   templateUrl: './create-list-button.component.html',
   styleUrls: ['./create-list-button.component.css']
 })
-export class CreateListButtonComponent implements OnInit {
-
-  listName: string;
+export class CreateListButtonComponent {
 
   constructor(public dialog: MatDialog, public listService: ListServiceService) { }
 
-  ngOnInit(): void {
-  }
-
   openCreateListDialog(): void {
     const dialogRef = this.dialog.open(ListCreateDialogComponent, {
-      width: '250',
-      data: {
-        listName: this.listName
-      }
+      width: '250'
     });
 
     dialogRef.afterClosed().subscribe(result => {

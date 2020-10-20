@@ -1,8 +1,10 @@
 <h2 mat-dialog-title>Confirm Delete</h2>
 <mat-dialog-content class="mat-typography">
     <h3 *ngIf="data.element == 'task'">Are you sure you want to delete this task ?</h3>
-    <h3 *ngIf="data.element == 'list'">Are you sure you want to delete this list ? </h3>
-    <p *ngIf="data.element == 'list'">Carefull !! Deleting this list will delete all tasks in this list</p>
+    <ng-container *ngIf="data.element == 'list'">
+        <h3>Are you sure you want to delete this list ? </h3>
+        <p>Carefull !! Deleting this list will delete all tasks in this list</p>
+    </ng-container>
 </mat-dialog-content>
 <mat-dialog-actions>
     <button mat-raised-button mat-dialog-close>Cancel</button>

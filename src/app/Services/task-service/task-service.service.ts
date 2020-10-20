@@ -9,17 +9,12 @@ import { Task } from '../../models/task-model/task.model';
 export class TaskServiceService {
 
   private updatedTasks = new BehaviorSubject<Task[]>([]);
-  private completedTasks = new BehaviorSubject<Task[]>([]);
 
   constructor() { }
 
   //Listen to any change in the array
   getTaskUpdateListner() {
     return this.updatedTasks.asObservable();
-  }
-
-  getCompleteTaskUpdateListner() {
-    return this.completedTasks.asObservable();
   }
 
   //Adding a tasks
@@ -48,34 +43,23 @@ export class TaskServiceService {
   }
 
   deleteTaskWithListID(listId: number){
-    let newTaskList = [...this.completedTasks.value];
-    newTaskList = newTaskList.filter(el => el.listId != listId);
-    this.completedTasks.next(newTaskList);
-  }
-
-  //Set task to complete
-  setTaskToComplete(task: any){
-    let newCompletedTaskList = [...this.completedTasks.value];
-    task.complete = true;
-    task.status = 'Done';
-    newCompletedTaskList.push(task);
-    this.completedTasks.next(newCompletedTaskList);
-    this.deleteTask(task.id);
-  }
-
-  setTaskBackToIncomplete(task:any){
-    let newTaskList = [...this.updatedTasks.value];
-    task.complete = false;
-    task.status = 'Ready';
-    newTaskList.push(task);
+    const newTaskList = this.updatedTasks.value.filter(el => el.listId != listId);
     this.updatedTasks.next(newTaskList);
-    this.deleteTaskfromComplete(task.id);
   }
 
-    //Delete a task from complete list
-    deleteTaskfromComplete(taskId: number) {
-      let newTaskList = [...this.completedTasks.value];
-      newTaskList = newTaskList.filter(el => el.id != taskId);
-      this.completedTasks.next(newTaskList);
-    }
+  editTask(id: number, update: Partial<Task>) {
+    const taskList = [...this.updatedTasks.value]
+    const editedTaskList = taskList.map(task => {
+      if (task.id == id) {
+        return {
+          ...task,
+          ...update
+        }
+      } else {
+        return task
+      }
+    })
+
+    this.updatedTasks.next(editedTaskList)
+  }
 }
