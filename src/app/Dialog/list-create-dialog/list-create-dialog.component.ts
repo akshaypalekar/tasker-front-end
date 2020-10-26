@@ -9,8 +9,7 @@ import { List } from '../../models/list-model/list.model';
 })
 export class ListCreateDialogComponent implements OnInit {
 
-  constructor( public dialogRef: MatDialogRef<ListCreateDialogComponent>,
-    @Inject(MAT_DIALOG_DATA) public data: List) { }
+  constructor( public dialogRef: MatDialogRef<ListCreateDialogComponent> ) { }
 
   ngOnInit(): void {
   }

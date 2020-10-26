@@ -1,5 +1,6 @@
 import { BrowserModule } from '@angular/platform-browser';
 import { NgModule } from '@angular/core';
+import { HttpClientModule } from '@angular/common/http';
 
 import { AppRoutingModule } from './app-routing.module';
 import { AppComponent } from './app.component';
@@ -35,6 +36,10 @@ import {MatNativeDateModule} from '@angular/material/core';
 import { MatCheckboxModule } from '@angular/material/checkbox';
 import { MatDividerModule } from '@angular/material/divider';
 import { PageNotFoundContainerComponent } from './components/main-container/page-not-found-container/page-not-found-container.component';
+import { ReportDashboardComponent } from './components/main-container/report-dashboard/report-dashboard.component';
+import { ListMenuResolverService } from './resolvers/list-menu-resolver/list-menu-resolver.service';
+import { TaskListResolverService } from './resolvers/task-list-resolver/task-list-resolver.service';
+import {MatProgressSpinnerModule} from '@angular/material/progress-spinner';
 
 
 
@@ -52,7 +57,8 @@ import { PageNotFoundContainerComponent } from './components/main-container/page
     TaskDeleteDialogComponent,
     ListEditDialogComponent,
     TaskEditDialogComponent,
-    PageNotFoundContainerComponent
+    PageNotFoundContainerComponent,
+    ReportDashboardComponent
   ],
   imports: [
     BrowserModule,
@@ -76,9 +82,11 @@ import { PageNotFoundContainerComponent } from './components/main-container/page
     MatDatepickerModule,
     MatNativeDateModule,
     MatCheckboxModule,
-    MatDividerModule
+    MatDividerModule,
+    HttpClientModule,
+    MatProgressSpinnerModule
   ],
-  providers: [],
+  providers: [ListMenuResolverService, TaskListResolverService],
   bootstrap: [AppComponent]
 })
 export class AppModule { }

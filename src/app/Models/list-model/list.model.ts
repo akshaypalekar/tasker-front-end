@@ -1,4 +1,7 @@
 export class List {
-    id: number;
-    listName: string;
+    ListID: string;
+    ListName: string;
+    ListCreatedDT: Date;
+    ListUpdatedDT: Date;
+    ListIndex: number;
 }

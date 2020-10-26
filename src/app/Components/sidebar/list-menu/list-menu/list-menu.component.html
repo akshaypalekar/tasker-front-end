@@ -1,25 +1,28 @@
-<div cdkDropList class="example-list" (cdkDropListDropped)="drop($event)">
-    <div class="example-box" *ngFor="let list of listMenu" [routerLink]="['/list',list.id]" cdkDrag>
-
-        <div class="list-text">
-            <span class="material-icons ">drag_indicator</span><span class="list-name-span">{{list.listName}}</span>
-        </div>
-
-        <div>
-            <button mat-icon-button [matMenuTriggerFor]="menu" aria-label="Example icon-button with a menu">
-            <mat-icon>more_vert</mat-icon>
-          </button>
-            <mat-menu #menu="matMenu" xPosition="before">
-                <button mat-menu-item (click)="openListEditDialog(list)">
-              <mat-icon>edit</mat-icon>
-              <span>Edit</span>
-            </button>
-                <button mat-menu-item (click)="openDeleteDialog(list)">
-              <mat-icon>delete</mat-icon>
-              <span>Delete</span>
-            </button>
-            </mat-menu>
-        </div>
-
-    </div>
+<div *ngIf="listMenu.length == 0" class="empty-list">
+  <img src="../../../../../assets/images/empty_list.svg">
+  <p> Create a new list to get started !!!</p>
 </div>
+
+  <div *ngIf="listMenu.length != 0" cdkDropList class="example-list" (cdkDropListDropped)="drop($event)">
+    <div class="example-box" *ngFor="let list of listMenu" [routerLink]="['/list',list.ListID]" cdkDrag>
+      <div class="list-text">
+        <span class="material-icons ">drag_indicator</span><span class="list-name-span">{{list.ListName}}</span>
+      </div>
+
+      <div>
+        <button mat-icon-button [matMenuTriggerFor]="menu" aria-label="Example icon-button with a menu">
+          <mat-icon>more_vert</mat-icon>
+        </button>
+        <mat-menu #menu="matMenu" xPosition="before">
+          <button mat-menu-item (click)="openListEditDialog(list)">
+            <mat-icon>edit</mat-icon>
+            <span>Edit</span>
+          </button>
+          <button mat-menu-item (click)="openDeleteDialog(list.ListID)">
+            <mat-icon>delete</mat-icon>
+            <span>Delete</span>
+          </button>
+        </mat-menu>
+      </div>
+    </div>
+  </div>

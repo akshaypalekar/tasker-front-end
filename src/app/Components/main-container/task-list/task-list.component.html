@@ -1,5 +1,5 @@
 <mat-card *ngIf="taskList.length == 0 && completedTaskList.length == 0">
-    <img src="../../../../assets/images/new_to_do_illustration_w_text.jpg">
+    <img src="../../../../assets/images/girl_with_generic_task_list_themed.svg">
 </mat-card>
 
 <div *ngIf="taskList.length != 0 ||completedTaskList.length != 0 " cdkDropList class="container example-list" (cdkDropListDropped)="drop($event)">

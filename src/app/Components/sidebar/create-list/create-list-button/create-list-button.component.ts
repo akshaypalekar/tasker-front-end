@@ -1,5 +1,5 @@
 import { Component, OnInit } from '@angular/core';
-import { MatDialog, MatDialogRef, MAT_DIALOG_DATA } from '@angular/material/dialog';
+import { MatDialog } from '@angular/material/dialog';
 import { ListCreateDialogComponent } from '../../../../dialog/list-create-dialog/list-create-dialog.component';
 import { ListServiceService } from 'src/app/services/list-service/list-service.service';
 
@@ -19,15 +19,12 @@ export class CreateListButtonComponent implements OnInit {
 
   openCreateListDialog(): void {
     const dialogRef = this.dialog.open(ListCreateDialogComponent, {
-      width: '250',
-      data: {
-        listName: this.listName
-      }
+      width: '250'
     });
 
     dialogRef.afterClosed().subscribe(result => {
       if (typeof result != undefined) {
-        if (result.trim().length > 0) {
+        if (result.toString().trim().length > 0) {
           this.listService.addNewListToMenu(result);
         }
       }
