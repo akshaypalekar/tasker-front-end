@@ -1,7 +1,12 @@
-<div *ngIf="listMenu.length == 0" class="empty-list">
-  <img src="../../../../../assets/images/empty_list.svg">
-  <p> Create a new list to get started !!!</p>
-</div>
+<div class="container">
+  <button mat-raised-button color="primary" class="new-list-button" (click)="openCreateListDialog()">
+    <mat-icon>add</mat-icon> New List
+  </button>
+
+  <div *ngIf="listMenu.length == 0" class="empty-list">
+    <img src="../../../../../assets/images/empty_list.svg">
+    <p> Create a new list to get started !!!</p>
+  </div>
 
   <div *ngIf="listMenu.length != 0" cdkDropList class="example-list" (cdkDropListDropped)="drop($event)">
     <div class="example-box" *ngFor="let list of listMenu" [routerLink]="['/list',list.ListID]" cdkDrag>
@@ -18,7 +23,7 @@
             <mat-icon>edit</mat-icon>
             <span>Edit</span>
           </button>
-          <button mat-menu-item (click)="openDeleteDialog(list.ListID)">
+          <button mat-menu-item (click)="openDeleteDialog(list)">
             <mat-icon>delete</mat-icon>
             <span>Delete</span>
           </button>
@@ -26,3 +31,5 @@
       </div>
     </div>
   </div>
+
+</div>

@@ -1,4 +1,4 @@
-<h1 mat-dialog-title>List Name</h1>
+<h1 mat-dialog-title>New List Name</h1>
 <div mat-dialog-content>
     <mat-form-field appearance="outline">
         <input #listName cdkFocusInitial matInput placeholder="List Name" maxlength="60">
@@ -6,5 +6,5 @@
 </div>
 <div mat-dialog-actions class="action-buttons">
     <button mat-raised-button (click)="onNoClick()">Cancel</button>
-    <button mat-raised-button color="primary" [mat-dialog-close]="listName.value" cdkFocusInitial>Create</button>
+    <button mat-raised-button color="primary" [disabled]="!listName.value" [mat-dialog-close]="listName.value" cdkFocusInitial>Create</button>
 </div>

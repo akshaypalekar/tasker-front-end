@@ -11,6 +11,7 @@ import { ListMenuResolverService } from './resolvers/list-menu-resolver/list-men
 const routes: Routes = [
   { path: 'list/:id', component: WrapperContainerComponent, resolve: {id: TaskListResolverService }},
   { path: '', component: ReportDashboardComponent },
+  { path: '', component: ListMenuComponent, outlet: 'app-list-menu', resolve: {list: ListMenuResolverService } },
   { path: '**', component: PageNotFoundContainerComponent },  // Wildcard route for a 404 page
 
 ];

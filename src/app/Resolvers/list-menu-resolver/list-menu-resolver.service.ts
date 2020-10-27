@@ -11,11 +11,13 @@ import { environment } from 'src/environments/environment';
 @Injectable({
   providedIn: 'root',
 })
-export class ListMenuResolverService {
+export class ListMenuResolverService implements Resolve<any>{
 
-  constructor(
-    
-  ) {}
+  constructor(private http: HttpClient, public httpService: HttpServiceService) {}
+
+  resolve(route: ActivatedRouteSnapshot, state: RouterStateSnapshot) :Observable<List[]> {
+    return this.http.get<List[]>(environment.endpoint + 'list');
+  }
 
   
 }

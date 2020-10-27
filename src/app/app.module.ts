@@ -40,6 +40,7 @@ import { ReportDashboardComponent } from './components/main-container/report-das
 import { ListMenuResolverService } from './resolvers/list-menu-resolver/list-menu-resolver.service';
 import { TaskListResolverService } from './resolvers/task-list-resolver/task-list-resolver.service';
 import {MatProgressSpinnerModule} from '@angular/material/progress-spinner';
+import { DeleteConfirmationDialogComponent } from './dialog/delete-confirmation-dialog/delete-confirmation-dialog.component';
 
 
 
@@ -58,7 +59,8 @@ import {MatProgressSpinnerModule} from '@angular/material/progress-spinner';
     ListEditDialogComponent,
     TaskEditDialogComponent,
     PageNotFoundContainerComponent,
-    ReportDashboardComponent
+    ReportDashboardComponent,
+    DeleteConfirmationDialogComponent
   ],
   imports: [
     BrowserModule,

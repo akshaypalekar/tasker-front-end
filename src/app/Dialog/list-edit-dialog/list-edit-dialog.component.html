@@ -2,10 +2,10 @@
 <div mat-dialog-content>
     <p>What would you like to rename it to ?</p>
     <mat-form-field appearance="outline">
-        <input matInput maxlength="60" matInput [(ngModel)]="data.name">
+        <input matInput maxlength="60" matInput [(ngModel)]="data.ListName">
     </mat-form-field>
 </div>
 <div mat-dialog-actions class="action-buttons">
     <button mat-raised-button (click)="onNoClick()">Cancel</button>
-    <button mat-raised-button [disabled]="!data.name"  [mat-dialog-close]="data.name" color="primary" cdkFocusInitial>Rename</button>
+    <button mat-raised-button [disabled]="!data.ListName"  [mat-dialog-close]="data.ListName" color="primary" cdkFocusInitial>Rename</button>
 </div>

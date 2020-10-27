@@ -25,7 +25,7 @@ export class CreateListButtonComponent implements OnInit {
     dialogRef.afterClosed().subscribe(result => {
       if (typeof result != undefined) {
         if (result.toString().trim().length > 0) {
-          this.listService.addNewListToMenu(result);
+          //this.listService.addNewListToMenu(result);
         }
       }
     })
