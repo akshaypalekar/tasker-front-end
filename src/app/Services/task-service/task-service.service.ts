@@ -1,81 +1,104 @@
+import { HttpClient } from '@angular/common/http';
 import { Injectable } from '@angular/core';
-import { BehaviorSubject, Observable } from 'rxjs';
+import * as moment from 'moment';
+import { BehaviorSubject, combineLatest, Observable } from 'rxjs';
+import { environment } from 'src/environments/environment';
 import { Task } from '../../models/task-model/task.model';
-
+import { HttpServiceService } from '../http-service/http-service.service';
 
 @Injectable({
-  providedIn: 'root'
+  providedIn: 'root',
 })
 export class TaskServiceService {
+  constructor(
+    private http: HttpClient,
+    public httpService: HttpServiceService
+  ) {}
 
-  private updatedTasks = new BehaviorSubject<Task[]>([]);
-  private completedTasks = new BehaviorSubject<Task[]>([]);
-
-  constructor() { }
-
-  //Listen to any change in the array
-  getTaskUpdateListner() {
-    return this.updatedTasks.asObservable();
+  getTaskList(ListID: string) {
+    return this.http.get<Task[]>(environment.endpoint + 'task/' + ListID);
   }
 
-  getCompleteTaskUpdateListner() {
-    return this.completedTasks.asObservable();
+  getCompletedTaskList(ListID: string) {
+    return this.http.get<Task[]>(environment.endpoint + 'taskcomplete/' + ListID);
   }
 
   //Adding a tasks
-  addTask(todo: string,selectedListId: number){
-    const id = new Date().valueOf();
+  addTask(todo: string, selectedListId: string, taskIndex: number) {
     const task: Task = {
-      id: id,
-      listId: selectedListId,
-      todo: todo,
-      description:'',
-      status:'Ready',
-      priority:'Medium',
-      dueDate: new Date(),
-      complete: false
-    }
-    let newTaskList = [...this.updatedTasks.value];
-    newTaskList.push(task);
-    this.updatedTasks.next(newTaskList);
+      TaskID: '',
+      ListID: selectedListId,
+      TaskTitle: todo,
+      TaskDescription: '',
+      TaskStatus: 'Ready',
+      TaskDueDT: moment(),
+      TaskPriority: 'Medium',
+      isComplete: false,
+      isArchived: false,
+      isDueDateSet: false,
+      TaskOrder: taskIndex,
+      TaskCreatedDT: moment(),
+      TaskUpdatedDT: moment(),
+    };
+
+    return this.http.post<Task[]>(
+      environment.endpoint + 'task',
+      JSON.stringify(task)
+    );
   }
 
   //Delete a task
-  deleteTask(taskId: number) {
-    let newTaskList = [...this.updatedTasks.value];
-    newTaskList = newTaskList.filter(el => el.id != taskId);
-    this.updatedTasks.next(newTaskList);
+  deleteTask(TaskID: string, type: string) {
+    return this.http.delete<Task[]>(environment.endpoint + type + TaskID);
   }
 
-  deleteTaskWithListID(listId: number){
-    let newTaskList = [...this.completedTasks.value];
-    newTaskList = newTaskList.filter(el => el.listId != listId);
-    this.completedTasks.next(newTaskList);
+  //Edit a task
+  editTask(task: Task) {
+    return this.http.post<Task[]>(
+      environment.endpoint + 'task',
+      JSON.stringify(task)
+    );
   }
 
-  //Set task to complete
-  setTaskToComplete(task: any){
-    let newCompletedTaskList = [...this.completedTasks.value];
-    task.complete = true;
-    task.status = 'Done';
-    newCompletedTaskList.push(task);
-    this.completedTasks.next(newCompletedTaskList);
-    this.deleteTask(task.id);
+  updateTask(taskList: Task[], task: Task, response: any): Task[]{
+    taskList = taskList.map((item) => {
+      if (task.TaskID == item.TaskID) {
+        return {
+          ...item,
+          ...response,
+        };
+      } else {
+        return item;
+      }
+    });
+
+    return taskList;
   }
 
-  setTaskBackToIncomplete(task:any){
-    let newTaskList = [...this.updatedTasks.value];
-    task.complete = false;
-    task.status = 'Ready';
-    newTaskList.push(task);
-    this.updatedTasks.next(newTaskList);
-    this.deleteTaskfromComplete(task.id);
+
+  completeTask(data: any){
+    return this.http.post<Task[]>(
+      environment.endpoint + 'taskcomplete',
+      JSON.stringify(data)
+    );
   }
 
-    //Delete a task from complete list
-    deleteTaskfromComplete(taskId: number) {
-      let newTaskList = [...this.completedTasks.value];
-      newTaskList = newTaskList.filter(el => el.id != taskId);
-      this.completedTasks.next(newTaskList);
-    }
+  restoreTask(data: any){
+    return this.http.post<Task[]>(
+      environment.endpoint + 'taskrestore',
+      JSON.stringify(data)
+    );
+  }
+
+  archiveTask(data:any){
+    return this.http.post<Task[]>(environment.endpoint + 'taskarchive', JSON.stringify(data));
+  }
+
+
+  // var lat = t.sort(function(a,b){
+  //   if(a.text < b.text) { return -1; }
+  //   if(a.text > b.text) { return 1; }
+  //   return 0;
+  // });
+
 }

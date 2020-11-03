@@ -1,23 +1,20 @@
+import { HttpClient } from '@angular/common/http';
 import { Injectable } from '@angular/core';
-import { ActivatedRouteSnapshot, Resolve, Router, RouterStateSnapshot } from '@angular/router';
-import { Observable, Subscription } from 'rxjs';
-import { ListServiceService } from '../../services/list-service/list-service.service';
+import { ActivatedRoute, ActivatedRouteSnapshot, Resolve, Router, RouterStateSnapshot } from '@angular/router';
+import { Observable } from 'rxjs';
+import { Task } from 'src/app/models/task-model/task.model';
+import { HttpServiceService } from 'src/app/services/http-service/http-service.service';
+import { environment } from 'src/environments/environment';
 
 @Injectable({
   providedIn: 'root'
 })
-export class TaskListResolverService implements Resolve<number> {
-  private listItemSub: Subscription;
+export class TaskListResolverService implements Resolve<any> {
 
-  constructor(public listService: ListServiceService, private router: Router) { }
+  constructor(private http: HttpClient, public httpService: HttpServiceService, private activatedRoute: ActivatedRoute) { }
   
-   resolve(route: ActivatedRouteSnapshot, state: RouterStateSnapshot): Observable<any>|Promise<any>|any {
-    let urlListID = route.paramMap.get('id');
-    let doesListExist = this.listService.checkIfListExists();
-    if(doesListExist){
-      return urlListID;
-    }else{
-      this.router.navigate(['/']);
-    }
+   resolve(route: ActivatedRouteSnapshot, state: RouterStateSnapshot): Observable<Task[]> {
+    console.log("Task List Component Resolving...");
+    return this.http.get<Task[]>(environment.endpoint + 'task/' + route.paramMap.get('id'));
   }
 }

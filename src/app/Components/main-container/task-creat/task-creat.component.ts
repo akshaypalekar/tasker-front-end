@@ -12,13 +12,13 @@ import { Subscription } from 'rxjs';
 export class TaskCreatComponent implements OnInit, OnDestroy {
 
   routeSub: Subscription;
-  selectedListId: number;
+  selectedListId: string;
 
   constructor(public taskService: TaskServiceService,  private route: ActivatedRoute) { }
 
   ngOnInit(): void {
     this.routeSub = this.route.paramMap.subscribe(params => {
-      this.selectedListId = Number(params.get('id'));
+      this.selectedListId = params.get('id');
     });
   }
 
@@ -27,7 +27,7 @@ export class TaskCreatComponent implements OnInit, OnDestroy {
       return;
     }
 
-    this.taskService.addTask(form.value.taskInputField, this.selectedListId);
+    //this.taskService.addTask(form.value.taskInputField, this.selectedListId);
     form.resetForm();
   }
 

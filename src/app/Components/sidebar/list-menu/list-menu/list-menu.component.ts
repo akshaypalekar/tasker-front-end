@@ -6,7 +6,7 @@ import { MatDialog } from '@angular/material/dialog';
 import { ListEditDialogComponent } from 'src/app/dialog/list-edit-dialog/list-edit-dialog.component';
 import { MatSnackBar } from '@angular/material/snack-bar';
 import { TaskServiceService } from '../../../../services/task-service/task-service.service';
-import { ActivatedRoute } from '@angular/router';
+import { ActivatedRoute, Router } from '@angular/router';
 import { ListCreateDialogComponent } from 'src/app/dialog/list-create-dialog/list-create-dialog.component';
 import { DeleteConfirmationDialogComponent } from 'src/app/dialog/delete-confirmation-dialog/delete-confirmation-dialog.component';
 
@@ -23,24 +23,25 @@ export class ListMenuComponent implements OnInit {
     public taskService: TaskServiceService,
     public dialog: MatDialog,
     private _snackBar: MatSnackBar,
-    private route: ActivatedRoute
+    private activatedRoute: ActivatedRoute,
+    private router: Router
   ) {}
 
   //Function to get any items when the component is created
   ngOnInit(): void {
-    this.route.data.subscribe((response) => {
-      this.listMenu = response.list.sort(function (a, b) {
-        return a.ListIndex - b.ListIndex;
+    this.activatedRoute.data.subscribe((response) => {
+      this.listMenu = response.list.sort(function (a: { ListOrder: number; }, b: { ListOrder: number; }) {
+        return a.ListOrder - b.ListOrder;
       });
     });
   }
 
-  getList(){
-    this.listService.getlist().subscribe((response) =>{
+  getList() {
+    this.listService.getlist().subscribe((response) => {
       this.listMenu = response.sort(function (a, b) {
-        return a.ListIndex - b.ListIndex;
+        return a.ListOrder - b.ListOrder;
       });
-    })
+    });
   }
 
   //Create a list item dialog
@@ -53,15 +54,12 @@ export class ListMenuComponent implements OnInit {
       if (ListName != undefined) {
         this.listService
           .addItem(ListName, this.listMenu.length)
-          .subscribe((response: List[]) => {
-            const list = {
-              ListID: response['ListID'],
-              ListName: response['ListName'],
-              ListCreatedDT: new Date(response['ListCreatedDT']),
-              ListUpdatedDT: new Date(response['ListUpdatedDT']),
-              ListIndex: parseInt(response['ListIndex']),
+          .subscribe((response: any) => {
+            const list: List = {
+              ...response
             };
             this.listMenu.push(list);
+            this.router.navigate(['/list', list.ListID]);
             this.openSnackBar('New List Added', 'Dismiss');
           });
       }
@@ -81,12 +79,14 @@ export class ListMenuComponent implements OnInit {
       if (result != undefined || result == '' || result == listItem.ListName) {
         this.listService
           .editList(listItem, result)
-          .subscribe((response: List[]) => {
-            for (let i in this.listMenu) {
-              if (this.listMenu[i].ListID == response['ListID']) {
-                this.listMenu[i].ListName = result;
+          .subscribe((response: any) => {
+            this.listMenu.map((list) =>{
+              for (let i in this.listMenu) {
+                if (this.listMenu[i].ListID == response['ListID']) {
+                 this.listMenu[i].ListName = result;
+                }
               }
-            }
+            })
             this.openSnackBar('List Edited', 'Dismiss');
           });
       }
@@ -96,7 +96,7 @@ export class ListMenuComponent implements OnInit {
   //Delete a list Dialog
   openDeleteDialog(ListItem: any): void {
     const dialogRef = this.dialog.open(DeleteConfirmationDialogComponent, {
-      width: '380px',
+      width: '400px',
       data: {
         element: 'list',
         ListName: ListItem.ListName,
@@ -106,11 +106,15 @@ export class ListMenuComponent implements OnInit {
     dialogRef.afterClosed().subscribe((result) => {
       if (result == true) {
         this.listService.deleteList(ListItem.ListID).subscribe((response) => {
-          console.log(response);
+          this.listMenu = this.listMenu.filter(item => item.ListID !=  ListItem.ListID);
+          if (this.listMenu.length == 0) {
+            this.router.navigate(['']);
+          } else {
+            this.router.navigate(['/list', this.listMenu[0].ListID]);
+          }
           this.getList();
-          this.openSnackBar('List Deleted', 'Dismiss');
+          this.openSnackBar(ListItem.ListName + ' list deleted and ' + response['NumberOfTasks'] + ' tasks archived' , 'Dismiss');
         });
-        //this.taskService.deleteTaskWithListID(listItem.id); //Delete all tasks that belong to that list
       }
     });
   }

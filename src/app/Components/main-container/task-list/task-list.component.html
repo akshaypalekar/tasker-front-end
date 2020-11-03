@@ -1,69 +1,108 @@
+<!-- Task Submit Component -->
+<div class="container-fluid">
+    <form (submit)="createTask(taskForm)" #taskForm="ngForm">
+        <div class="form-row align-items-center">
+            <div class="col-xs-12 col-lg-11">
+                <input type="text" maxlength="100" class="form-control mb-2" id="inlineFormInput"
+                    placeholder="Whats up ?" ngModel name="taskInputField" #taskField="ngModel" required>
+            </div>
+            <div class="col-xs-12 col-lg-1">
+                <button mat-raised-button color="primary" class="btn btn-primary mb-2">Add Task</button>
+            </div>
+        </div>
+    </form>
+</div>
+
+<!-- Task List Component -->
 <mat-card *ngIf="taskList.length == 0 && completedTaskList.length == 0">
     <img src="../../../../assets/images/girl_with_generic_task_list_themed.svg">
 </mat-card>
 
-<div *ngIf="taskList.length != 0 ||completedTaskList.length != 0 " cdkDropList class="container example-list" (cdkDropListDropped)="drop($event)">
-    <div *ngFor="let task of taskList" ngClass="row example-box" [ngStyle]="{'border-left': getBorderColor(task.priority)}" cdkDrag>
+<div *ngIf="taskList.length != 0" class="container example-list row-heading">
+    <div class="row">
+        <div class="col-lg-7 col-md-7 col-xs-12 col-12 task-header">Task<mat-icon>swap_vert</mat-icon>
+        </div>
+        <div class="col-lg-1 col-md-1 col-sm-3 col-xs-3 col-3 row-header">Status<mat-icon>swap_vert</mat-icon>
+        </div>
+        <div class="col-lg-2 col-md-2 col-sm-4 col-xs-4 col-4 row-header">Due Date<mat-icon>swap_vert</mat-icon>
+        </div>
+        <div class="col-lg-1 col-md-1 col-sm-3 col-xs-3 col-3 row-header">Priority<mat-icon>swap_vert</mat-icon>
+        </div>
+        <div class="col-lg-1 col-md-1 col-sm-2 col-xs-2 col-2 row-header">Actions</div>
+    </div>
+</div>
+
+<div *ngIf="taskList.length != 0" cdkDropList class="container example-list" (cdkDropListDropped)="drop($event)">
+    <div *ngFor="let task of taskList | taskCompletePipe:false" ngClass="row example-box"
+        [ngStyle]="{'border-left': getBorderColor(task.TaskPriority)}" cdkDrag>
         <div class="example-custom-placeholder" *cdkDragPlaceholder></div>
 
         <div class="col-lg-7 col-md-7 col-xs-12 col-12 task-text-box">
-            <mat-checkbox class="example-margin" color="primary" [checked]="task.complete" (change)="onCompleteCheck(task)"></mat-checkbox>
-            <span class="task-text-span">{{task.todo}}</span>
+            <mat-checkbox class="example-margin" color="primary" [checked]="task.isComplete"
+                (change)="onCompleteCheck(task)"></mat-checkbox>
+            <span class="task-text-span">{{task.TaskTitle}}</span>
         </div>
 
-        <div *ngIf="task.status == 'Ready'" class="col-lg-1 col-md-1 col-sm-3 col-xs-3 col-3 status-box" style="background-color: #dfa800;">Ready</div>
-        <div *ngIf="task.status == 'In Progress'" class="col-lg-1 col-md-1 col-sm-3 col-xs-3 col-3 status-box" style="background-color: #1155cc;">In Progress</div>
-        <div *ngIf="task.status == 'Done'" class="col-lg-1 col-md-1 col-sm-3 col-xs-3 col-3 status-box" style="background-color: #38761d;">Done</div>
-        <div *ngIf="task.status == 'Stuck'" class="col-lg-1 col-md-1 col-sm-3 col-xs-3 col-3 status-box" style="background-color: #990000;">Stuck</div>
-        <div *ngIf="task.status == 'Hold'" class="col-lg-1 col-md-1 col-sm-3 col-xs-3 col-3 status-box" style="background-color: #741b47;">On Hold</div>
+        <div *ngIf="task.TaskStatus == 'Ready'" class="col-lg-1 col-md-1 col-sm-3 col-xs-3 col-3 status-box"
+            style="background-color: #dfa800;">Ready</div>
+        <div *ngIf="task.TaskStatus == 'In Progress'" class="col-lg-1 col-md-1 col-sm-3 col-xs-3 col-3 status-box"
+            style="background-color: #1155cc;">In Progress</div>
+        <div *ngIf="task.TaskStatus == 'Done'" class="col-lg-1 col-md-1 col-sm-3 col-xs-3 col-3 status-box"
+            style="background-color: #38761d;">Done</div>
+        <div *ngIf="task.TaskStatus == 'Stuck'" class="col-lg-1 col-md-1 col-sm-3 col-xs-3 col-3 status-box"
+            style="background-color: #990000;">Stuck</div>
+        <div *ngIf="task.TaskStatus == 'Hold'" class="col-lg-1 col-md-1 col-sm-3 col-xs-3 col-3 status-box"
+            style="background-color: #741b47;">On Hold</div>
 
         <div class="col-lg-2 col-md-2 col-sm-4 col-xs-4 col-4 due-date-box">
-            <span matTooltip="Due Date" class="dueDate">{{task.dueDate.toLocaleString('default', {month: 'short'}) + ' ' + task.dueDate.getDate() + ', ' + task.dueDate.getFullYear() }}</span>
+            <span matTooltip="Due Date" class="dueDate">{{getMomentFormat(task.TaskDueDT)}}</span>
         </div>
 
-        <div *ngIf="task.priority == 'Low'" class="col-lg-1 col-md-1 col-sm-3 col-xs-3 col-3 priority-box" style="background-color: #3c78d8;">Low</div>
-        <div *ngIf="task.priority == 'Medium'" class="col-lg-1 col-md-1 col-sm-3 col-xs-3 col-3 priority-box" style="background-color:#6aa84f;">Medium</div>
-        <div *ngIf="task.priority == 'High'" class="col-lg-1 col-md-1 col-sm-3 col-xs-3 col-3 priority-box" style="background-color: #e77f11;">High</div>
-        <div *ngIf="task.priority == 'Critical'" class="col-lg-1 col-md-1 col-sm-3 col-xs-3 col-3 priority-box" style="background-color: #cc0000;">Critical</div>
+        <div *ngIf="task.TaskPriority == 'Low'" class="col-lg-1 col-md-1 col-sm-3 col-xs-3 col-3 priority-box"
+            style="background-color: #3c78d8;">Low</div>
+        <div *ngIf="task.TaskPriority == 'Medium'" class="col-lg-1 col-md-1 col-sm-3 col-xs-3 col-3 priority-box"
+            style="background-color:#6aa84f;">Medium</div>
+        <div *ngIf="task.TaskPriority == 'High'" class="col-lg-1 col-md-1 col-sm-3 col-xs-3 col-3 priority-box"
+            style="background-color: #e77f11;">High</div>
+        <div *ngIf="task.TaskPriority == 'Critical'" class="col-lg-1 col-md-1 col-sm-3 col-xs-3 col-3 priority-box"
+            style="background-color: #cc0000;">Critical</div>
 
         <div class="col-lg-1 col-md-1 col-sm-2 col-xs-2 col-2 action-box">
             <span matTooltip="Edit" class="material-icons edit" (click)="openEditModal(task)">edit</span>
-            <span matTooltip="Delete" class="material-icons delete" (click)="openDeleteModal(task.id,task.complete)">delete</span>
-        </div>
-
-    </div><br>
-
-    <mat-divider *ngIf="completedTaskList.length !=0">Completed</mat-divider>
-
-    <br>
-    <div *ngFor="let task of completedTaskList" class="row example-box" cdkDrag>
-        <div class="example-custom-placeholder" *cdkDragPlaceholder></div>
-
-        <div class="col-lg-7 col-md-7 col-xs-12 col-12 task-text-box">
-            <mat-checkbox class="example-margin" color="primary" [checked]="task.complete" (change)="restoreTask(task)"></mat-checkbox>
-            <span [class]="taskCompleteClass">{{task.todo}}</span>
-        </div>
-
-        <div *ngIf="task.status == 'Draft'" class="col-lg-1 col-md-1 col-sm-3 col-xs-3 col-3 status-box" style="background-color: #95A5A6;">Draft</div>
-        <div *ngIf="task.status == 'In Progress'" class="col-lg-1 col-md-1 col-sm-3 col-xs-3 col-3 status-box" style="background-color: #0099ff;">Progress</div>
-        <div *ngIf="task.status == 'Done'" class="col-lg-1 col-md-1 col-sm-3 col-xs-3 col-3 status-box" style="background-color: #58D68D;">Done</div>
-        <div *ngIf="task.status == 'Stuck'" class="col-lg-1 col-md-1 col-sm-3 col-xs-3 col-3 status-box" style="background-color: Red;">Stuck</div>
-        <div *ngIf="task.status == 'Hold'" class="col-lg-1 col-md-1 col-sm-3 col-xs-3 col-3 status-box" style="background-color: #666699;">Hold</div>
-        <div *ngIf="task.status == 'Review'" class="col-lg-1 col-md-1 col-sm-3 col-xs-3 col-3 status-box" style="background-color: #cbaf87;">Review</div>
-
-        <div class="col-lg-2 col-md-2 col-sm-4 col-xs-4 col-4 due-date-box">
-            <span matTooltip="Due Date" class="dueDate">{{task.dueDate.toLocaleString('default', {month: 'short'}) + ' ' + task.dueDate.getDate() + ', ' + task.dueDate.getFullYear() }}</span>
-        </div>
-
-        <div *ngIf="task.priority == 'Low'" class="col-lg-1 col-md-1 col-sm-3 col-xs-3 col-3 priority-box" style="background-color: #7FB3D5;">Low</div>
-        <div *ngIf="task.priority == 'Medium'" class="col-lg-1 col-md-1 col-sm-3 col-xs-3 col-3 priority-box" style="background-color: Orange;">Medium</div>
-        <div *ngIf="task.priority == 'High'" class="col-lg-1 col-md-1 col-sm-3 col-xs-3 col-3 priority-box" style="background-color: #f2d600;">High</div>
-        <div *ngIf="task.priority == 'Critical'" class="col-lg-1 col-md-1 col-sm-3 col-xs-3 col-3 priority-box" style="background-color: #E74C3C;">Critical</div>
-
-        <div class="col-lg-1 col-md-1 col-sm-2 col-xs-2 col-2 action-box">
-            <span matTooltip="Edit" class="material-icons edit" (click)="openEditModal(task)">edit</span>
-            <span matTooltip="Delete" class="material-icons delete" (click)="openDeleteModal(task.id,task.complete)">delete</span>
+            <span matTooltip="Delete" class="material-icons delete" (click)="openDeleteModal(task.TaskID, 'task/')">delete</span>
         </div>
 
     </div>
+</div>
+
+<br>
+<mat-divider *ngIf="completedTaskList.length !=0">Completed</mat-divider>
+<br>
+
+<div *ngIf="completedTaskList.length != 0" cdkDropList class="container example-list"
+    (cdkDropListDropped)="drop($event)">
+    <div *ngFor="let task of completedTaskList" ngClass="row example-box">
+        <div class="example-custom-placeholder" *cdkDragPlaceholder></div>
+
+        <div class="col-lg-7 col-md-7 col-xs-12 col-12 task-text-box">
+            <mat-checkbox class="example-margin" color="primary" [checked]="task.isComplete"
+                (change)="restoreTask(task)"></mat-checkbox>
+            <span class="task-text-span">{{task.TaskTitle}}</span>
+        </div>
+
+        <div class="col-lg-1 col-md-1 col-sm-3 col-xs-3 col-3 status-box" style="background-color: #808080;">{{task.TaskStatus}}</div>
+
+        <div class="col-lg-2 col-md-2 col-sm-4 col-xs-4 col-4 due-date-box">
+            <span matTooltip="Due Date" class="dueDate">{{getMomentFormat(task.TaskDueDT)}}</span>
+        </div>
+
+        <div class="col-lg-1 col-md-1 col-sm-3 col-xs-3 col-3 priority-box" style="background-color: #808080;">{{task.TaskPriority}}</div>
+
+        <div class="col-lg-1 col-md-1 col-sm-2 col-xs-2 col-2 action-box">
+            <span matTooltip="Archive" class="material-icons archive" (click)="archiveTask(task)">archive</span>
+            <span matTooltip="Delete" class="material-icons delete" (click)="openDeleteModal(task.TaskID, 'taskcomplete/')">delete</span>
+        </div>
+
+    </div>
+
 </div>

@@ -25,13 +25,13 @@ export class ListServiceService {
   }
 
   //Add List Item
-  addItem(ListName: string, ListIndex: number): Observable<List[]> {
+  addItem(ListName: string, ListOrder: number): Observable<List[]> {
     const item: List = {
       ListID: '',
       ListName: ListName,
-      ListCreatedDT: new Date(),
-      ListUpdatedDT: new Date(),
-      ListIndex: ListIndex,
+      ListCreatedDT: moment(),
+      ListUpdatedDT: moment(),
+      ListOrder: ListOrder,
     };
 
     return this.http.post<List[]>(
@@ -46,8 +46,8 @@ export class ListServiceService {
       ListID: listItem.ListID,
       ListName: newName,
       ListCreatedDT: listItem.ListCreatedDT,
-      ListUpdatedDT: new Date(),
-      ListIndex: listItem.ListIndex,
+      ListUpdatedDT: moment(),
+      ListOrder: listItem.ListOrder,
     };
 
     return this.http.post<List[]>(environment.endpoint + 'list', JSON.stringify(item));
@@ -56,14 +56,5 @@ export class ListServiceService {
   //Delete a list
   deleteList(ListID: string) {
     return this.http.delete(environment.endpoint + 'list/' + ListID);
-  }
-
-  //Checks if the list contains more than one list item, if not then return false
-  checkIfListExists() {
-    if (this.list.value.length >= 1) {
-      return true;
-    } else {
-      return false;
-    }
   }
 }

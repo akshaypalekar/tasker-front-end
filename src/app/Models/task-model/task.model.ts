@@ -1,10 +1,15 @@
 export class Task {
-    id: number;
-    listId: number;
-    todo: string;
-    description: string;
-    priority: string;
-    dueDate: Date;
-    status: string;
-    complete: boolean;
+    TaskID: string;
+    ListID: string;
+    TaskTitle: string;
+    TaskDescription: string;
+    TaskPriority: string;
+    TaskDueDT: moment.Moment;
+    TaskStatus: string;
+    isComplete: boolean;
+    isArchived: boolean;
+    isDueDateSet: boolean;
+    TaskOrder: number;
+    TaskCreatedDT: moment.Moment;
+    TaskUpdatedDT: moment.Moment;
 }

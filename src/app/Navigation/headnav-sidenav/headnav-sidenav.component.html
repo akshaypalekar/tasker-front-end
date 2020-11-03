@@ -5,7 +5,7 @@
     </button>
         <img routerLink="/" src="../../../assets/images/tasker_logo_new.png" width="140" height="140">
     </mat-toolbar>
-
+    
     <mat-sidenav-container class="sidenav-container">
         <mat-sidenav #drawer class="sidenav" [attr.role]="(isHandset$ | async) ? 'dialog' : 'navigation'" [mode]="(isHandset$ | async) ? 'over' : 'side'" [opened]="(isHandset$ | async) === false">
             <!-- <app-create-list-button></app-create-list-button> -->
@@ -15,7 +15,9 @@
             </mat-nav-list>
         </mat-sidenav>
         <mat-sidenav-content>
+            <app-spinner></app-spinner>
             <router-outlet></router-outlet>
         </mat-sidenav-content>
     </mat-sidenav-container>
 </div>
+

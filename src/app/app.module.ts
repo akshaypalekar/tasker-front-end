@@ -1,6 +1,6 @@
 import { BrowserModule } from '@angular/platform-browser';
 import { NgModule } from '@angular/core';
-import { HttpClientModule } from '@angular/common/http';
+import { HttpClientModule, HTTP_INTERCEPTORS } from '@angular/common/http';
 
 import { AppRoutingModule } from './app-routing.module';
 import { AppComponent } from './app.component';
@@ -41,6 +41,10 @@ import { ListMenuResolverService } from './resolvers/list-menu-resolver/list-men
 import { TaskListResolverService } from './resolvers/task-list-resolver/task-list-resolver.service';
 import {MatProgressSpinnerModule} from '@angular/material/progress-spinner';
 import { DeleteConfirmationDialogComponent } from './dialog/delete-confirmation-dialog/delete-confirmation-dialog.component';
+import { SpinnerComponent } from './components/spinner/spinner.component';
+import { TaskCompletePipePipe } from './pipes/task-complete-pipe/task-complete-pipe.pipe';
+import { SpinnerServiceService } from './services/spinner-service/spinner-service.service';
+import { RequestInterceptor } from './interceptors/request-interceptor/request-interceptor';
 
 
 
@@ -60,7 +64,9 @@ import { DeleteConfirmationDialogComponent } from './dialog/delete-confirmation-
     TaskEditDialogComponent,
     PageNotFoundContainerComponent,
     ReportDashboardComponent,
-    DeleteConfirmationDialogComponent
+    DeleteConfirmationDialogComponent,
+    SpinnerComponent,
+    TaskCompletePipePipe
   ],
   imports: [
     BrowserModule,
@@ -88,7 +94,7 @@ import { DeleteConfirmationDialogComponent } from './dialog/delete-confirmation-
     HttpClientModule,
     MatProgressSpinnerModule
   ],
-  providers: [ListMenuResolverService, TaskListResolverService],
+  providers: [ListMenuResolverService, TaskListResolverService, SpinnerServiceService, { provide: HTTP_INTERCEPTORS, useClass: RequestInterceptor, multi: true }],
   bootstrap: [AppComponent]
 })
 export class AppModule { }
