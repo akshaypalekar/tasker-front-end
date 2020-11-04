@@ -14,7 +14,10 @@ export class TaskListResolverService implements Resolve<any> {
   constructor(private http: HttpClient, public httpService: HttpServiceService, private activatedRoute: ActivatedRoute) { }
   
    resolve(route: ActivatedRouteSnapshot, state: RouterStateSnapshot): Observable<Task[]> {
-    console.log("Task List Component Resolving...");
+    
     return this.http.get<Task[]>(environment.endpoint + 'task/' + route.paramMap.get('id'));
   }
+
+
+  /*************This is not in use */
 }

@@ -1,7 +1,6 @@
 import { HttpClient } from '@angular/common/http';
 import { Injectable } from '@angular/core';
 import * as moment from 'moment';
-import { BehaviorSubject, combineLatest, Observable } from 'rxjs';
 import { environment } from 'src/environments/environment';
 import { Task } from '../../models/task-model/task.model';
 import { HttpServiceService } from '../http-service/http-service.service';
@@ -21,6 +20,10 @@ export class TaskServiceService {
 
   getCompletedTaskList(ListID: string) {
     return this.http.get<Task[]>(environment.endpoint + 'taskcomplete/' + ListID);
+  }
+
+  getAllTasks(){
+    return this.http.get<Task[]>(environment.endpoint + 'task');
   }
 
   //Adding a tasks
@@ -93,12 +96,5 @@ export class TaskServiceService {
   archiveTask(data:any){
     return this.http.post<Task[]>(environment.endpoint + 'taskarchive', JSON.stringify(data));
   }
-
-
-  // var lat = t.sort(function(a,b){
-  //   if(a.text < b.text) { return -1; }
-  //   if(a.text > b.text) { return 1; }
-  //   return 0;
-  // });
 
 }

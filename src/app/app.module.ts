@@ -46,6 +46,14 @@ import { TaskCompletePipePipe } from './pipes/task-complete-pipe/task-complete-p
 import { SpinnerServiceService } from './services/spinner-service/spinner-service.service';
 import { RequestInterceptor } from './interceptors/request-interceptor/request-interceptor';
 
+import { FullCalendarModule } from '@fullcalendar/angular'; // the main connector. must go first
+import dayGridPlugin from '@fullcalendar/daygrid'; // a plugin
+import interactionPlugin from '@fullcalendar/interaction'; // a plugin
+
+FullCalendarModule.registerPlugins([ // register FullCalendar plugins
+  dayGridPlugin,
+  interactionPlugin
+]);
 
 
 @NgModule({
@@ -92,7 +100,8 @@ import { RequestInterceptor } from './interceptors/request-interceptor/request-i
     MatCheckboxModule,
     MatDividerModule,
     HttpClientModule,
-    MatProgressSpinnerModule
+    MatProgressSpinnerModule,
+    FullCalendarModule
   ],
   providers: [ListMenuResolverService, TaskListResolverService, SpinnerServiceService, { provide: HTTP_INTERCEPTORS, useClass: RequestInterceptor, multi: true }],
   bootstrap: [AppComponent]

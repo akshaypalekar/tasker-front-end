@@ -9,6 +9,7 @@ import { TaskServiceService } from '../../../../services/task-service/task-servi
 import { ActivatedRoute, Router } from '@angular/router';
 import { ListCreateDialogComponent } from 'src/app/dialog/list-create-dialog/list-create-dialog.component';
 import { DeleteConfirmationDialogComponent } from 'src/app/dialog/delete-confirmation-dialog/delete-confirmation-dialog.component';
+import { MoveableServiceService } from 'src/app/services/moveable-service/moveable-service.service';
 
 @Component({
   selector: 'app-list-menu',
@@ -24,13 +25,17 @@ export class ListMenuComponent implements OnInit {
     public dialog: MatDialog,
     private _snackBar: MatSnackBar,
     private activatedRoute: ActivatedRoute,
-    private router: Router
+    private router: Router,
+    public _moveable: MoveableServiceService
   ) {}
 
   //Function to get any items when the component is created
   ngOnInit(): void {
     this.activatedRoute.data.subscribe((response) => {
-      this.listMenu = response.list.sort(function (a: { ListOrder: number; }, b: { ListOrder: number; }) {
+      this.listMenu = response.list.sort(function (
+        a: { ListOrder: number },
+        b: { ListOrder: number }
+      ) {
         return a.ListOrder - b.ListOrder;
       });
     });
@@ -56,7 +61,7 @@ export class ListMenuComponent implements OnInit {
           .addItem(ListName, this.listMenu.length)
           .subscribe((response: any) => {
             const list: List = {
-              ...response
+              ...response,
             };
             this.listMenu.push(list);
             this.router.navigate(['/list', list.ListID]);
@@ -80,13 +85,13 @@ export class ListMenuComponent implements OnInit {
         this.listService
           .editList(listItem, result)
           .subscribe((response: any) => {
-            this.listMenu.map((list) =>{
+            this.listMenu.map((list) => {
               for (let i in this.listMenu) {
                 if (this.listMenu[i].ListID == response['ListID']) {
-                 this.listMenu[i].ListName = result;
+                  this.listMenu[i].ListName = result;
                 }
               }
-            })
+            });
             this.openSnackBar('List Edited', 'Dismiss');
           });
       }
@@ -106,14 +111,22 @@ export class ListMenuComponent implements OnInit {
     dialogRef.afterClosed().subscribe((result) => {
       if (result == true) {
         this.listService.deleteList(ListItem.ListID).subscribe((response) => {
-          this.listMenu = this.listMenu.filter(item => item.ListID !=  ListItem.ListID);
+          this.listMenu = this.listMenu.filter(
+            (item) => item.ListID != ListItem.ListID
+          );
           if (this.listMenu.length == 0) {
             this.router.navigate(['']);
           } else {
             this.router.navigate(['/list', this.listMenu[0].ListID]);
           }
           this.getList();
-          this.openSnackBar(ListItem.ListName + ' list deleted and ' + response['NumberOfTasks'] + ' tasks archived' , 'Dismiss');
+          this.openSnackBar(
+            ListItem.ListName +
+              ' list deleted and ' +
+              response['NumberOfTasks'] +
+              ' tasks archived',
+            'Dismiss'
+          );
         });
       }
     });
@@ -124,7 +137,19 @@ export class ListMenuComponent implements OnInit {
     console.log(
       'P_Index: ' + event.previousIndex + ' C_Index:' + event.currentIndex
     );
-    moveItemInArray(this.listMenu, event.previousIndex, event.currentIndex);
+
+    this._moveable
+      .moveList(
+        this.listMenu[event.previousIndex].ListID,
+        event.currentIndex,
+        event.previousIndex
+      )
+      .subscribe((response) => {
+        //moveItemInArray(this.listMenu, event.previousIndex, event.currentIndex);
+        this.listMenu = response.sort(function (a, b) {
+          return a.ListOrder - b.ListOrder;
+        });
+      });
   }
 
   openSnackBar(message: string, action: string) {
