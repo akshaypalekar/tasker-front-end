@@ -8,8 +8,8 @@ import { MatSnackBar } from '@angular/material/snack-bar';
 import { TaskDeleteDialogComponent } from 'src/app/dialog/task-delete-dialog/task-delete-dialog.component';
 import { TaskEditDialogComponent } from 'src/app/dialog/task-edit-dialog/task-edit-dialog.component';
 import { NgForm } from '@angular/forms';
-import { SpinnerServiceService } from '../../../services/spinner-service/spinner-service.service';
 import * as moment from 'moment';
+import { MoveableServiceService } from 'src/app/services/moveable-service/moveable-service.service';
 
 @Component({
   selector: 'app-task-list',
@@ -29,6 +29,7 @@ export class TaskListComponent {
     private activatedRoute: ActivatedRoute,
     public dialog: MatDialog,
     private _snackBar: MatSnackBar,
+    public _moveable: MoveableServiceService
   ) {
     this.activatedRoute.paramMap.subscribe((params) => {
       this.selectedListId = params.get('id');
@@ -186,11 +187,13 @@ export class TaskListComponent {
     });
   }
 
-  archiveTask(task: any): void{
-    this.taskService.archiveTask(task).subscribe((response) =>{
-      this.completedTaskList = this.completedTaskList.filter((el) => el.TaskID != task.TaskID);
+  archiveTask(task: any): void {
+    this.taskService.archiveTask(task).subscribe((response) => {
+      this.completedTaskList = this.completedTaskList.filter(
+        (el) => el.TaskID != task.TaskID
+      );
       this.openSnackBar('Task Archived', 'Dismiss');
-    })
+    });
   }
 
   //Get the index to be set on the task
@@ -225,6 +228,24 @@ export class TaskListComponent {
 
   //Logic for drag and drop of task items
   drop(event: CdkDragDrop<string[]>) {
-    moveItemInArray(this.taskList, event.previousIndex, event.currentIndex);
+    console.log(
+      'P_Index: ' + event.previousIndex + ' C_Index:' + event.currentIndex
+    );
+
+    this._moveable
+      .moveTask(
+        this.taskList[event.previousIndex].TaskID,
+        this.taskList[event.previousIndex].ListID,
+        event.currentIndex,
+        event.previousIndex
+      )
+      .subscribe((response) => {
+        console.log(response);
+        //moveItemInArray(this.listMenu, event.previousIndex, event.currentIndex);
+        this.taskList = response.sort(function (a, b) {
+          return a.TaskOrder - b.TaskOrder;
+        });
+      });
+    //moveItemInArray(this.taskList, event.previousIndex, event.currentIndex);
   }
 }

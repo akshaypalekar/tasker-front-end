@@ -13,6 +13,13 @@ export class ReportDashboardComponent implements OnInit {
   calendarData = [];
   dashboardData = [];
 
+  colorMap = {
+    "Critical": "#cc0000",
+    "High": "#e69138",
+    "Medium": "#6aa84f",
+    "Low": "#3c78d8"
+  }
+
   constructor(private activatedRoute: ActivatedRoute) {}
 
   calendarOptions: CalendarOptions;
@@ -21,10 +28,12 @@ export class ReportDashboardComponent implements OnInit {
   ngOnInit() {
     this.activatedRoute.data.subscribe((response) => {
       this.calendarData = response.task.map(
-        (data: { TaskTitle: any; TaskDueDT: moment.MomentInput }) => {
+        (data: { TaskTitle: string, TaskDueDT: moment.MomentInput, TaskPriority: string, TaskDescription: string }) => {
           return {
             title: data.TaskTitle,
             date: moment(data.TaskDueDT).format('YYYY-MM-DD'),
+            description: data.TaskDescription,
+            color: this.colorMap[data.TaskPriority]
           };
         }
       );
@@ -35,6 +44,8 @@ export class ReportDashboardComponent implements OnInit {
         };
       });
     });
+
+    console.log(this.dashboardData.length);
 
     //Calendar
     this.calendarOptions = {

@@ -1,4 +1,4 @@
-import { Component, OnInit } from '@angular/core';
+import { Component, Inject, OnInit } from '@angular/core';
 import { CdkDragDrop, moveItemInArray } from '@angular/cdk/drag-drop';
 import { List } from '../../../../models/list-model/list.model';
 import { ListServiceService } from 'src/app/services/list-service/list-service.service';
@@ -6,7 +6,7 @@ import { MatDialog } from '@angular/material/dialog';
 import { ListEditDialogComponent } from 'src/app/dialog/list-edit-dialog/list-edit-dialog.component';
 import { MatSnackBar } from '@angular/material/snack-bar';
 import { TaskServiceService } from '../../../../services/task-service/task-service.service';
-import { ActivatedRoute, Router } from '@angular/router';
+import { ActivatedRoute, Router, RouterLinkActive } from '@angular/router';
 import { ListCreateDialogComponent } from 'src/app/dialog/list-create-dialog/list-create-dialog.component';
 import { DeleteConfirmationDialogComponent } from 'src/app/dialog/delete-confirmation-dialog/delete-confirmation-dialog.component';
 import { MoveableServiceService } from 'src/app/services/moveable-service/moveable-service.service';
@@ -26,7 +26,7 @@ export class ListMenuComponent implements OnInit {
     private _snackBar: MatSnackBar,
     private activatedRoute: ActivatedRoute,
     private router: Router,
-    public _moveable: MoveableServiceService
+    public _moveable: MoveableServiceService,
   ) {}
 
   //Function to get any items when the component is created

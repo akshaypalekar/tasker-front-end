@@ -15,9 +15,9 @@ export class TaskListResolverService implements Resolve<any> {
   
    resolve(route: ActivatedRouteSnapshot, state: RouterStateSnapshot): Observable<Task[]> {
     
-    return this.http.get<Task[]>(environment.endpoint + 'task/' + route.paramMap.get('id'));
+    return this.http.get<Task[]>(environment.endpoint + 'archivedtasks');
   }
 
 
-  /*************This is not in use */
+  /*************Used for Archive List ****************************************/
 }
