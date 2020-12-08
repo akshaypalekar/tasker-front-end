@@ -1,4 +1,4 @@
-import { HttpClient } from '@angular/common/http';
+import { HttpClient, HttpParams } from '@angular/common/http';
 import { Injectable } from '@angular/core';
 import { ActivatedRouteSnapshot, Resolve, RouterStateSnapshot } from '@angular/router';
 import { Observable } from 'rxjs';
@@ -15,8 +15,10 @@ export class ListMenuResolverService implements Resolve<any>{
   constructor(private http: HttpClient, public httpService: HttpServiceService) {}
 
   resolve(route: ActivatedRouteSnapshot, state: RouterStateSnapshot) :Observable<List[]> {
-    return this.http.get<List[]>(environment.endpoint + 'list');
+    let user = 'akshay123';
+    let params = new HttpParams();
+    params = params.append('itemType', 'list');
+    
+    return this.http.get<List[]>(environment.api_endpoint + 'users/'+ user +'/items', {params: params});
   }
-
-  
 }

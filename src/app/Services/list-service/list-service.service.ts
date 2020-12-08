@@ -2,7 +2,7 @@ import { Injectable } from '@angular/core';
 import { BehaviorSubject, Observable } from 'rxjs';
 import { List } from '../../models/list-model/list.model';
 import { Router, ActivatedRoute } from '@angular/router';
-import { HttpClient } from '@angular/common/http';
+import { HttpClient, HttpParams } from '@angular/common/http';
 import { HttpServiceService } from '../http-service/http-service.service';
 import { environment } from 'src/environments/environment';
 import * as moment from 'moment';
@@ -12,6 +12,7 @@ import * as moment from 'moment';
 })
 export class ListServiceService {
   private list = new BehaviorSubject<List[]>([]);
+  user = 'akshay123';
 
   constructor(
     private router: Router,
@@ -21,40 +22,47 @@ export class ListServiceService {
   ) {}
 
   getlist(): Observable<List[]> {
-    return this.http.get<List[]>(environment.endpoint + 'list');
+    let params = new HttpParams();
+    params = params.append('itemType', 'list');
+
+    return this.http.get<List[]>(environment.api_endpoint + 'users/'+ this.user +'/items', {params: params});
   }
 
   //Add List Item
-  addItem(ListName: string, ListOrder: number): Observable<List[]> {
+  addItem(ListName: string): Observable<List[]> {
     const item: List = {
-      ListID: '',
+      ItemType: 'LIST',
+      ItemID: '',
       ListName: ListName,
-      ListCreatedDT: moment(),
-      ListUpdatedDT: moment(),
-      ListOrder: ListOrder,
+      CreatedOn: moment(),
+      CreatedBy: 'akshay123',
+      UpdatedOn: moment(),
+      UpdatedBy: 'akshay123',
     };
 
-    return this.http.post<List[]>(
-      environment.endpoint + 'list',
-      JSON.stringify(item)
-    );
+    return this.http.post<List[]>(environment.api_endpoint + 'users/'+ this.user +'/items', JSON.stringify(item));
   }
 
   //Edit List Item
-  editList(listItem: any, newName: string):Observable<List[]> {
+  editList(listItem: any, newName: string):Observable<List> {
     const item: List = {
-      ListID: listItem.ListID,
+      ItemType: 'LIST',
+      ItemID: listItem.ItemID,
       ListName: newName,
-      ListCreatedDT: listItem.ListCreatedDT,
-      ListUpdatedDT: moment(),
-      ListOrder: listItem.ListOrder,
+      CreatedOn: listItem.CreatedOn,
+      CreatedBy: 'akshay123',
+      UpdatedOn: moment(),
+      UpdatedBy: 'akshay123',
     };
 
-    return this.http.post<List[]>(environment.endpoint + 'list', JSON.stringify(item));
+    return this.http.put<List>(environment.api_endpoint + 'users/'+ this.user +'/items', item);
   }
 
   //Delete a list
   deleteList(ListID: string) {
-    return this.http.delete(environment.endpoint + 'list/' + ListID);
+    let params = new HttpParams();
+    params = params.append('itemType', 'list');
+    params = params.append('itemId', ListID);
+    return this.http.delete(environment.api_endpoint + 'users/'+ this.user +'/items', {params: params});
   }
 }

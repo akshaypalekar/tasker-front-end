@@ -30,7 +30,7 @@
 
 <div *ngIf="taskList.length != 0" cdkDropList class="container example-list" (cdkDropListDropped)="drop($event)">
     <div *ngFor="let task of taskList | taskCompletePipe:false" ngClass="row example-box"
-        [ngStyle]="{'border-left': getBorderColor(task.TaskPriority)}" cdkDrag>
+        [ngStyle]="{'border-left': getBorderColor(task.TaskPriority)}">
         <div class="example-custom-placeholder" *cdkDragPlaceholder></div>
 
         <div class="col-lg-7 col-md-7 col-xs-12 col-12 task-text-box">
@@ -65,7 +65,7 @@
 
         <div class="col-lg-1 col-md-1 col-sm-2 col-xs-2 col-2 action-box">
             <span matTooltip="Edit" class="material-icons edit" (click)="openEditModal(task)">edit</span>
-            <span matTooltip="Delete" class="material-icons delete" (click)="openDeleteModal(task.TaskID, 'task/')">delete</span>
+            <span matTooltip="Delete" class="material-icons delete" (click)="openDeleteModal(task)">delete</span>
         </div>
 
     </div>
@@ -75,14 +75,12 @@
 
 <br>
 
-<div *ngIf="completedTaskList.length != 0" cdkDropList class="container example-list"
-    (cdkDropListDropped)="drop($event)">
-    <div *ngFor="let task of completedTaskList" ngClass="row example-box">
+<div *ngIf="taskList.length != 0" cdkDropList class="container example-list" (cdkDropListDropped)="drop($event)">
+    <div *ngFor="let task of taskList | taskCompletePipe:true" ngClass="row example-box">
         <div class="example-custom-placeholder" *cdkDragPlaceholder></div>
 
         <div class="col-lg-7 col-md-7 col-xs-12 col-12 task-text-box">
-            <mat-checkbox class="example-margin" color="primary" [checked]="task.isComplete"
-                (change)="restoreTask(task)"></mat-checkbox>
+            <mat-checkbox class="example-margin" color="primary" [checked]="task.isComplete" (change)="restoreTask(task)"></mat-checkbox>
             <span class="task-text-span task-complete-class">{{task.TaskTitle}}</span>
         </div>
 
@@ -96,7 +94,7 @@
 
         <div class="col-lg-1 col-md-1 col-sm-2 col-xs-2 col-2 action-box">
             <span matTooltip="Archive" class="material-icons archive" (click)="archiveTask(task)">archive</span>
-            <span matTooltip="Delete" class="material-icons delete" (click)="openDeleteModal(task.TaskID, 'taskcomplete/')">delete</span>
+            <span matTooltip="Delete" class="material-icons delete" (click)="openDeleteModal(task)">delete</span>
         </div>
 
     </div>

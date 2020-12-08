@@ -10,6 +10,7 @@ import { ActivatedRoute, Router, RouterLinkActive } from '@angular/router';
 import { ListCreateDialogComponent } from 'src/app/dialog/list-create-dialog/list-create-dialog.component';
 import { DeleteConfirmationDialogComponent } from 'src/app/dialog/delete-confirmation-dialog/delete-confirmation-dialog.component';
 import { MoveableServiceService } from 'src/app/services/moveable-service/moveable-service.service';
+import * as moment from 'moment';
 
 @Component({
   selector: 'app-list-menu',
@@ -27,25 +28,20 @@ export class ListMenuComponent implements OnInit {
     private activatedRoute: ActivatedRoute,
     private router: Router,
     public _moveable: MoveableServiceService,
-  ) {}
+  ) { }
 
   //Function to get any items when the component is created
   ngOnInit(): void {
     this.activatedRoute.data.subscribe((response) => {
-      this.listMenu = response.list.sort(function (
-        a: { ListOrder: number },
-        b: { ListOrder: number }
-      ) {
-        return a.ListOrder - b.ListOrder;
+      this.listMenu = response.list.sort((a,b) => {
+        return moment(a.CreatedOn).diff(b.CreatedOn);
       });
     });
   }
 
   getList() {
     this.listService.getlist().subscribe((response) => {
-      this.listMenu = response.sort(function (a, b) {
-        return a.ListOrder - b.ListOrder;
-      });
+      this.listMenu = response;
     });
   }
 
@@ -57,16 +53,14 @@ export class ListMenuComponent implements OnInit {
 
     dialogRef.afterClosed().subscribe((ListName) => {
       if (ListName != undefined) {
-        this.listService
-          .addItem(ListName, this.listMenu.length)
-          .subscribe((response: any) => {
-            const list: List = {
-              ...response,
-            };
-            this.listMenu.push(list);
-            this.router.navigate(['/list', list.ListID]);
-            this.openSnackBar('New List Added', 'Dismiss');
-          });
+        this.listService.addItem(ListName).subscribe((response: any) => {
+          const list: List = {
+            ...response,
+          };
+          this.listMenu.push(list);
+          this.router.navigate(['/list', list.ItemID]);
+          this.openSnackBar('New List Added', 'Dismiss');
+        });
       }
     });
   }
@@ -82,18 +76,14 @@ export class ListMenuComponent implements OnInit {
 
     dialogRef.afterClosed().subscribe((result) => {
       if (result != undefined || result == '' || result == listItem.ListName) {
-        this.listService
-          .editList(listItem, result)
-          .subscribe((response: any) => {
-            this.listMenu.map((list) => {
-              for (let i in this.listMenu) {
-                if (this.listMenu[i].ListID == response['ListID']) {
-                  this.listMenu[i].ListName = result;
-                }
-              }
-            });
-            this.openSnackBar('List Edited', 'Dismiss');
+        this.listService.editList(listItem, result).subscribe((response: List) => {
+          this.listMenu.map((list) => {
+            if (list.ItemID == response.ItemID) {
+              list.ListName = response.ListName;
+            }
           });
+          this.openSnackBar('List Edited', 'Dismiss');
+        });
       }
     });
   }
@@ -110,23 +100,15 @@ export class ListMenuComponent implements OnInit {
 
     dialogRef.afterClosed().subscribe((result) => {
       if (result == true) {
-        this.listService.deleteList(ListItem.ListID).subscribe((response) => {
-          this.listMenu = this.listMenu.filter(
-            (item) => item.ListID != ListItem.ListID
-          );
+        this.listService.deleteList(ListItem.ItemID).subscribe((response: string) => {
+          this.listMenu = this.listMenu.filter((item) => item.ItemID != ListItem.ItemID);
           if (this.listMenu.length == 0) {
             this.router.navigate(['']);
           } else {
-            this.router.navigate(['/list', this.listMenu[0].ListID]);
+            this.router.navigate(['/list', this.listMenu[0].ItemID]);
           }
           this.getList();
-          this.openSnackBar(
-            ListItem.ListName +
-              ' list deleted and ' +
-              response['NumberOfTasks'] +
-              ' tasks archived',
-            'Dismiss'
-          );
+          this.openSnackBar(response, 'Dismiss');
         });
       }
     });
@@ -137,19 +119,6 @@ export class ListMenuComponent implements OnInit {
     console.log(
       'P_Index: ' + event.previousIndex + ' C_Index:' + event.currentIndex
     );
-
-    this._moveable
-      .moveList(
-        this.listMenu[event.previousIndex].ListID,
-        event.currentIndex,
-        event.previousIndex
-      )
-      .subscribe((response) => {
-        //moveItemInArray(this.listMenu, event.previousIndex, event.currentIndex);
-        this.listMenu = response.sort(function (a, b) {
-          return a.ListOrder - b.ListOrder;
-        });
-      });
   }
 
   openSnackBar(message: string, action: string) {

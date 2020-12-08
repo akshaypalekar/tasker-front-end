@@ -1,5 +1,6 @@
 export class Task {
-    TaskID: string;
+    ItemType: string;
+    ItemID: string;
     ListID: string;
     TaskTitle: string;
     TaskDescription: string;
@@ -8,8 +9,8 @@ export class Task {
     TaskStatus: string;
     isComplete: boolean;
     isArchived: boolean;
-    isDueDateSet: boolean;
-    TaskOrder: number;
-    TaskCreatedDT: moment.Moment;
-    TaskUpdatedDT: moment.Moment;
+    CreatedOn: moment.Moment;
+    CreatedBy: string;
+    UpdatedOn: moment.Moment;
+    UpdatedBy: string
 }

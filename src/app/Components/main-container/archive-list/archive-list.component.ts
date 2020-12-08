@@ -15,7 +15,6 @@ export class ArchiveListComponent implements OnInit {
 
   ngOnInit(): void {
     this.activatedRoute.data.subscribe((response) => {
-      console.log(response);
       this.archiveList = response.archivedtask
     });
   }

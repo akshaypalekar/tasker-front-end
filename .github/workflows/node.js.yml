@@ -1,35 +1,23 @@
-# This workflow will upload the dist folder to AWS s3 bucket and invalidate CDN cache
-
-name: Sync S3 and Invalidate CDN Cache
+name: Upload to Amazon S3 and Invalidate CDN Cache
 
 on:
   push:
-    branches: master
+    branches: [master]
     
 jobs:
   deploy:
     runs-on: ubuntu-latest
     steps:
-    - uses: actions/checkout@master
-    
-    # Upload to S3
-    - name: sync s3
-      uses: jakejarvis/s3-sync-action@2fb81a9e9fea11e078587911c27754e42e6a6e88
+    - uses: actions/checkout@v2
+    - name: Configure AWS Credentials
+      uses: aws-actions/configure-aws-credentials@v1
       with:
-        args: --exclude '.git*/*' --delete --follow-symlinks
-      env:
-        SOURCE_DIR: 'dist/tasker-front-end'
-        AWS_REGION: 'us-east-1'
-        AWS_S3_BUCKET: ${{ secrets.AWS_S3_BUCKET }}
-        AWS_ACCESS_KEY_ID: ${{ secrets.AWS_ACCESS_KEY_ID }}
-        AWS_SECRET_ACCESS_KEY: ${{ secrets.AWS_SECRET_ACCESS_KEY }}
+        aws-access-key-id: ${{ secrets.AWS_ACCESS_KEY_ID }}
+        aws-secret-access-key: ${{ secrets.AWS_SECRET_ACCESS_KEY }}
+        aws-region: us-east-1
+    - name: Invalidate Cloud Front cache
+      run: aws cloudfront create-invalidation --distribution-id ${{ secrets.DISTRIBUTION }} --paths "/*"
+    - name: Deploy static site to S3 bucket
+      run: aws s3 sync dist/tasker-front-end s3://${{ secrets.AWS_S3_BUCKET }} --delete
     
-    # Invalidate Cloudfront (this action)
-    - name: invalidate
-      uses: chetan/invalidate-cloudfront-action@master
-      env:
-        DISTRIBUTION: ${{ secrets.DISTRIBUTION }}
-        PATHS: '/index.html'
-        AWS_REGION: 'us-east-1'
-        AWS_ACCESS_KEY_ID: ${{ secrets.AWS_ACCESS_KEY_ID }}
-        AWS_SECRET_ACCESS_KEY: ${{ secrets.AWS_SECRET_ACCESS_KEY }}
+  

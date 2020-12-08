@@ -11,34 +11,10 @@
         <textarea matInput [(ngModel)]="data.TaskDescription"></textarea>
     </mat-form-field>
 
-    <mat-form-field appearance="outline">
-        <mat-label>Priority</mat-label>
-        <mat-select [(value)]="data.TaskPriority">
-            <mat-option value="Low">
-                <div class="option">Low<span class="low-dot"></span></div>
-            </mat-option>
-            <mat-option value="Medium">
-                <div class="option">Meduim<span class="medium-dot"></span></div>
-            </mat-option>
-            <mat-option value="High">
-                <div class="option">High<span class="high-dot"></span></div>
-            </mat-option>
-            <mat-option value="Critical">
-                <div class="option">Critical<span class="critical-dot"></span></div>
-            </mat-option>
-        </mat-select>
-    </mat-form-field>
-
-    <mat-form-field color="accent" appearance="outline">
-        <mat-label>Due Date</mat-label>
-        <input matInput [matDatepicker]="duedatepicker" [(ngModel)]="data.TaskDueDT">
-        <mat-datepicker-toggle matSuffix [for]="duedatepicker"></mat-datepicker-toggle>
-        <mat-datepicker #duedatepicker color="primary"></mat-datepicker>
-    </mat-form-field>
-
     <div *ngIf="data.taskComplete == true" class="alert alert-info" role="alert">
         Cannot edit status when task is complete
     </div>
+
     <mat-form-field appearance="outline">
         <mat-label>Status</mat-label>
         <mat-select [(value)]="data.TaskStatus" [disabled]="data.isComplete == true">
@@ -60,8 +36,40 @@
         </mat-select>
     </mat-form-field>
 
+    <mat-form-field color="accent" appearance="outline">
+        <mat-label>Due Date</mat-label>
+        <input matInput [matDatepicker]="duedatepicker" [(ngModel)]="data.TaskDueDT">
+        <mat-datepicker-toggle matSuffix [for]="duedatepicker"></mat-datepicker-toggle>
+        <mat-datepicker #duedatepicker color="primary"></mat-datepicker>
+    </mat-form-field>
+
+    <mat-form-field appearance="outline">
+        <mat-label>Priority</mat-label>
+        <mat-select [(value)]="data.TaskPriority">
+            <mat-option value="Low">
+                <div class="option">Low<span class="low-dot"></span></div>
+            </mat-option>
+            <mat-option value="Medium">
+                <div class="option">Meduim<span class="medium-dot"></span></div>
+            </mat-option>
+            <mat-option value="High">
+                <div class="option">High<span class="high-dot"></span></div>
+            </mat-option>
+            <mat-option value="Critical">
+                <div class="option">Critical<span class="critical-dot"></span></div>
+            </mat-option>
+        </mat-select>
+    </mat-form-field>
+
+    <!-- <mat-form-field *ngIf="listMenu.length > 1" appearance="outline">
+        <mat-label>List</mat-label>
+        <mat-select [(value)]="data.ItemID">
+            <mat-option *ngFor="let list of displayList" value="{{list.ItemID}}">{{list.ListName}}</mat-option>
+        </mat-select>
+    </mat-form-field> -->
 
 </div>
+
 <div mat-dialog-actions class="action-buttons">
     <button mat-raised-button (click)="onNoClick()">Cancel</button>
     <button mat-raised-button [mat-dialog-close]="data" cdkFocusInitial color="primary">Save Task</button>

@@ -49,7 +49,6 @@ button {
   color: rgba(0, 0, 0, 0.87);
   box-sizing: border-box;
   border: solid 1px #ccc;
-  cursor: move;
   background: white;
   border-left: solid 5px gray;
   font-size: 16px;

@@ -27,15 +27,14 @@ export class ReportDashboardComponent implements OnInit {
 
   ngOnInit() {
     this.activatedRoute.data.subscribe((response) => {
-      this.calendarData = response.task.map(
-        (data: { TaskTitle: string, TaskDueDT: moment.MomentInput, TaskPriority: string, TaskDescription: string }) => {
+      this.calendarData = response.task.map((data) => {
           return {
             title: data.TaskTitle,
             date: moment(data.TaskDueDT).format('YYYY-MM-DD'),
             description: data.TaskDescription,
             color: this.colorMap[data.TaskPriority]
           };
-        }
+      }
       );
 
       this.dashboardData = response.task.map((data) => {
@@ -44,8 +43,6 @@ export class ReportDashboardComponent implements OnInit {
         };
       });
     });
-
-    console.log(this.dashboardData.length);
 
     //Calendar
     this.calendarOptions = {

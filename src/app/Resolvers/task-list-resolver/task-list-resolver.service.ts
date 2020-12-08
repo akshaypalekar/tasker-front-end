@@ -1,4 +1,4 @@
-import { HttpClient } from '@angular/common/http';
+import { HttpClient, HttpParams } from '@angular/common/http';
 import { Injectable } from '@angular/core';
 import { ActivatedRoute, ActivatedRouteSnapshot, Resolve, Router, RouterStateSnapshot } from '@angular/router';
 import { Observable } from 'rxjs';
@@ -15,7 +15,12 @@ export class TaskListResolverService implements Resolve<any> {
   
    resolve(route: ActivatedRouteSnapshot, state: RouterStateSnapshot): Observable<Task[]> {
     
-    return this.http.get<Task[]>(environment.endpoint + 'archivedtasks');
+    let user = 'akshay123';
+    let params = new HttpParams();
+    params = params.append('itemType', 'task');
+    params = params.append('archiveFlag', 'true');
+    
+    return this.http.get<Task[]>(environment.api_endpoint + 'users/'+ user +'/items', {params: params});
   }
 
 

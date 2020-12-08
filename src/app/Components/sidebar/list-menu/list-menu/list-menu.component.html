@@ -9,9 +9,9 @@
   </div>
 
   <div *ngIf="listMenu.length != 0" cdkDropList class="example-list" (cdkDropListDropped)="drop($event)">
-    <div *ngFor="let list of listMenu" [routerLink]="['/list',list.ListID]" routerLinkActive #rla="routerLinkActive" [ngClass]="rla.isActive ? 'example-box-active' : 'example-box'" cdkDrag>
+    <div *ngFor="let list of listMenu" [routerLink]="['/list',list.ItemID]" routerLinkActive #rla="routerLinkActive" [ngClass]="rla.isActive ? 'example-box-active' : 'example-box'" cdkDrag>
       <div class="list-text">
-        <span class="material-icons">drag_indicator</span><span class="list-name-span">{{list.ListName}}</span>
+        <span class="list-name-span">{{list.ListName}}</span>
       </div>
 
       <div>

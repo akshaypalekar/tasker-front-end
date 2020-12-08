@@ -1,7 +1,9 @@
 export class List {
-    ListID: string;
+    ItemType: string;
+    ItemID: string;
     ListName: string;
-    ListCreatedDT: moment.Moment;
-    ListUpdatedDT: moment.Moment;
-    ListOrder: number;
+    CreatedOn: moment.Moment;
+    CreatedBy: string;
+    UpdatedOn: moment.Moment;
+    UpdatedBy: string
 }

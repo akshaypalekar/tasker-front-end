@@ -9,9 +9,9 @@ export class TaskCompletePipePipe implements PipeTransform {
 
   transform(value: Task[], complete: boolean): unknown {
     if(complete){
-    return value.filter((task) => task.isComplete == true);
+    return value.filter((task) => task.isComplete == true && task.isArchived == false);
     }else{
-      return value.filter((task) => task.isComplete == false);
+      return value.filter((task) => task.isComplete == false && task.isArchived == false);
     }
   }
 }

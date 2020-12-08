@@ -18,34 +18,17 @@
         <div class="example-custom-placeholder" *cdkDragPlaceholder></div>
 
         <div class="col-lg-7 col-md-7 col-xs-12 col-12 task-text-box">
-            <mat-checkbox class="example-margin" color="primary" [checked]="task.isComplete"
-                (change)="onCompleteCheck(task)"></mat-checkbox>
+            <mat-checkbox class="example-margin" color="primary" [checked]="task.isComplete" [disabled]="true" (change)="onCompleteCheck(task)"></mat-checkbox>
             <span class="task-text-span">{{task.TaskTitle}}</span>
         </div>
 
-        <div *ngIf="task.TaskStatus == 'Ready'" class="col-lg-1 col-md-1 col-sm-3 col-xs-3 col-3 status-box"
-            style="background-color: #dfa800;">Ready</div>
-        <div *ngIf="task.TaskStatus == 'In Progress'" class="col-lg-1 col-md-1 col-sm-3 col-xs-3 col-3 status-box"
-            style="background-color: #1155cc;">In Progress</div>
-        <div *ngIf="task.TaskStatus == 'Done'" class="col-lg-1 col-md-1 col-sm-3 col-xs-3 col-3 status-box"
-            style="background-color: #38761d;">Done</div>
-        <div *ngIf="task.TaskStatus == 'Stuck'" class="col-lg-1 col-md-1 col-sm-3 col-xs-3 col-3 status-box"
-            style="background-color: #990000;">Stuck</div>
-        <div *ngIf="task.TaskStatus == 'Hold'" class="col-lg-1 col-md-1 col-sm-3 col-xs-3 col-3 status-box"
-            style="background-color: #741b47;">On Hold</div>
+        <div class="col-lg-1 col-md-1 col-sm-3 col-xs-3 col-3 status-box" style="background-color: #808080;">{{task.TaskStatus}}</div>
 
         <div class="col-lg-2 col-md-2 col-sm-4 col-xs-4 col-4 due-date-box">
             <span matTooltip="Due Date" class="dueDate">{{getMomentFormat(task.TaskDueDT)}}</span>
         </div>
 
-        <div *ngIf="task.TaskPriority == 'Low'" class="col-lg-1 col-md-1 col-sm-3 col-xs-3 col-3 priority-box"
-            style="background-color: #3c78d8;">Low</div>
-        <div *ngIf="task.TaskPriority == 'Medium'" class="col-lg-1 col-md-1 col-sm-3 col-xs-3 col-3 priority-box"
-            style="background-color:#6aa84f;">Medium</div>
-        <div *ngIf="task.TaskPriority == 'High'" class="col-lg-1 col-md-1 col-sm-3 col-xs-3 col-3 priority-box"
-            style="background-color: #e77f11;">High</div>
-        <div *ngIf="task.TaskPriority == 'Critical'" class="col-lg-1 col-md-1 col-sm-3 col-xs-3 col-3 priority-box"
-            style="background-color: #cc0000;">Critical</div>
+        <div class="col-lg-1 col-md-1 col-sm-3 col-xs-3 col-3 priority-box" style="background-color: #808080;">{{task.TaskPriority}}</div>
 
         <div class="col-lg-1 col-md-1 col-sm-2 col-xs-2 col-2 action-box">
             <span>No Action</span>

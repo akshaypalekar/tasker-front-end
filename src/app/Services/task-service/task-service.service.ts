@@ -1,6 +1,7 @@
-import { HttpClient } from '@angular/common/http';
+import { HttpClient, HttpParams } from '@angular/common/http';
 import { Injectable } from '@angular/core';
 import * as moment from 'moment';
+import { Observable } from 'rxjs';
 import { environment } from 'src/environments/environment';
 import { Task } from '../../models/task-model/task.model';
 import { HttpServiceService } from '../http-service/http-service.service';
@@ -9,27 +10,34 @@ import { HttpServiceService } from '../http-service/http-service.service';
   providedIn: 'root',
 })
 export class TaskServiceService {
+  user = 'akshay123';
+
   constructor(
     private http: HttpClient,
     public httpService: HttpServiceService
   ) {}
 
-  getTaskList(ListID: string) {
-    return this.http.get<Task[]>(environment.endpoint + 'task/' + ListID);
-  }
 
-  getCompletedTaskList(ListID: string) {
-    return this.http.get<Task[]>(environment.endpoint + 'taskcomplete/' + ListID);
+  getTaskList(ListID: string) {
+    let params = new HttpParams();
+    params = params.append('itemType', 'task');
+    params = params.append('listId', ListID);
+
+    return this.http.get<Task[]>(environment.api_endpoint + 'users/'+ this.user +'/items', {params: params});
   }
 
   getAllTasks(){
-    return this.http.get<Task[]>(environment.endpoint + 'task');
+    let params = new HttpParams();
+    params = params.append('itemType', 'task');
+
+    return this.http.get<Task[]>(environment.api_endpoint + 'users/'+ this.user +'/items', {params: params});
   }
 
   //Adding a tasks
-  addTask(todo: string, selectedListId: string, taskIndex: number) {
+  addTask(todo: string, selectedListId: string) {
     const task: Task = {
-      TaskID: '',
+      ItemType: 'TASK',
+      ItemID: '',
       ListID: selectedListId,
       TaskTitle: todo,
       TaskDescription: '',
@@ -38,34 +46,33 @@ export class TaskServiceService {
       TaskPriority: 'Medium',
       isComplete: false,
       isArchived: false,
-      isDueDateSet: false,
-      TaskOrder: taskIndex,
-      TaskCreatedDT: moment(),
-      TaskUpdatedDT: moment(),
+      CreatedOn: moment(),
+      CreatedBy: 'akshay123',
+      UpdatedOn: moment(),
+      UpdatedBy: 'akshay123'
     };
 
-    return this.http.post<Task[]>(
-      environment.endpoint + 'task',
-      JSON.stringify(task)
-    );
+    return this.http.post<Task[]>(environment.api_endpoint + 'users/'+ this.user +'/items', JSON.stringify(task));
   }
 
   //Delete a task
-  deleteTask(TaskID: string, type: string) {
-    return this.http.delete<Task[]>(environment.endpoint + type + TaskID);
+  deleteTask(task: Task) {
+    let params = new HttpParams();
+    params = params.append('itemType', 'task');
+    params = params.append('itemId', task.ItemID);
+    params = params.append('listId', task.ListID);
+
+    return this.http.delete<Task[]>(environment.api_endpoint + 'users/'+ this.user +'/items', {params: params});
   }
 
   //Edit a task
-  editTask(task: Task) {
-    return this.http.post<Task[]>(
-      environment.endpoint + 'task',
-      JSON.stringify(task)
-    );
+  editTask(task: Task): Observable<Task> {
+    return this.http.put<Task>(environment.api_endpoint + 'users/'+ this.user +'/items', JSON.stringify(task));
   }
 
   updateTask(taskList: Task[], task: Task, response: any): Task[]{
     taskList = taskList.map((item) => {
-      if (task.TaskID == item.TaskID) {
+      if (task.ItemID == item.ItemID) {
         return {
           ...item,
           ...response,
@@ -78,13 +85,6 @@ export class TaskServiceService {
     return taskList;
   }
 
-
-  completeTask(data: any){
-    return this.http.post<Task[]>(
-      environment.endpoint + 'taskcomplete',
-      JSON.stringify(data)
-    );
-  }
 
   restoreTask(data: any){
     return this.http.post<Task[]>(

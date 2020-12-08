@@ -34,38 +34,19 @@ export class TaskListComponent {
     this.activatedRoute.paramMap.subscribe((params) => {
       this.selectedListId = params.get('id');
       this.getTasks();
-      this.getCompletedTasks();
     });
   }
 
   getTasks(): void {
     this.taskService.getTaskList(this.selectedListId).subscribe((response) => {
-      this.taskList = response
-        .map((item: Task) => {
-          return {
-            ...item,
-          };
-        })
-        .sort(function (a: { TaskOrder: number }, b: { TaskOrder: number }) {
-          return a.TaskOrder - b.TaskOrder;
-        });
-    });
-  }
-
-  getCompletedTasks(): void {
-    this.taskService
-      .getCompletedTaskList(this.selectedListId)
-      .subscribe((response) => {
-        this.completedTaskList = response
-          .map((item: Task) => {
-            return {
-              ...item,
-            };
-          })
-          .sort(function (a: { TaskOrder: number }, b: { TaskOrder: number }) {
-            return a.TaskOrder - b.TaskOrder;
-          });
+      this.taskList = response.map((item: Task) => {
+        return {
+          ...item,
+        };
+      }).sort((a,b) => {
+        return moment(a.CreatedOn).diff(b.CreatedOn);
       });
+    });
   }
 
   // Create task form
@@ -74,28 +55,21 @@ export class TaskListComponent {
       return;
     }
 
-    this.taskService
-      .addTask(
-        form.value.taskInputField,
-        this.selectedListId,
-        this.getIndextoSet(this.selectedListId)
-      )
-      .subscribe(
-        (response: any) => {
-          const task: Task = {
-            ...response,
-          };
-          this.taskList.push(task);
-        },
-        (error) => {
-          console.log('Task not created: ' + JSON.stringify(error));
-        }
-      );
+    this.taskService.addTask(form.value.taskInputField, this.selectedListId).subscribe((response: any) => {
+      const task: Task = {
+        ...response,
+      };
+      this.taskList.push(task);
+    },
+      (error) => {
+        console.log('Task not created: ' + JSON.stringify(error));
+      }
+    );
     form.resetForm();
   }
 
   //Delete Dialog
-  openDeleteModal(TaskID: string, type: string): void {
+  openDeleteModal(item: Task): void {
     const dialogRef = this.dialog.open(TaskDeleteDialogComponent, {
       width: '350px',
       data: {
@@ -105,19 +79,13 @@ export class TaskListComponent {
 
     dialogRef.afterClosed().subscribe((result) => {
       if (result == true) {
-        this.taskService.deleteTask(TaskID, type).subscribe(
-          (response: any) => {
-            if (type == 'task/') {
-              this.taskList = this.taskList.filter(
-                (task) => task.TaskID != TaskID
-              );
-            } else {
-              this.completedTaskList = this.completedTaskList.filter(
-                (task) => task.TaskID != TaskID
-              );
-            }
+        this.taskService.deleteTask(item).subscribe((response: any) => {
+          console.log(response);
+          if (response == 'task deleted successfully') {
+            this.taskList = this.taskList.filter((task) => task.ItemID != item.ItemID);
             this.openSnackBar('Task Deleted', 'Dismiss');
-          },
+          }
+        },
           (error) => {
             console.log('Task not deleted: ' + JSON.stringify(error));
           }
@@ -138,15 +106,10 @@ export class TaskListComponent {
 
     dialogRef.afterClosed().subscribe((result) => {
       if (result != undefined) {
-        this.taskService.editTask(result).subscribe(
-          (response: any) => {
-            this.taskList = this.taskService.updateTask(
-              this.taskList,
-              task,
-              response
-            );
-            this.openSnackBar('Task Updated', 'Dismiss');
-          },
+        this.taskService.editTask(result).subscribe((response: Task) => {
+          this.taskList = this.taskService.updateTask(this.taskList, task, response);
+          this.openSnackBar('Task Updated', 'Dismiss');
+        },
           (error) => {
             console.log('Task not updated: ' + JSON.stringify(error));
           }
@@ -155,54 +118,36 @@ export class TaskListComponent {
     });
   }
 
-  //Push tasks in the completed list
-  onCompleteCheck(task: any): void {
-    const data = {
-      TaskID: task.TaskID,
-      completedOrder: this.completedTaskList.length,
-    };
-    this.taskService.completeTask(data).subscribe((response: any) => {
-      const task: Task = {
-        ...response,
-      };
-      this.completedTaskList.push(task);
-      this.getTasks();
+  //Edit task to update it make isComplete flag true
+  onCompleteCheck(task: Task): void {
+    task.isComplete = true;
+    this.taskService.editTask(task).subscribe((response: Task) => {
+      this.taskList = this.taskService.updateTask(this.taskList, task, response);
       this.openSnackBar('Task Completed', 'Dismiss');
     });
   }
 
   //Push tasks in the active list
-  restoreTask(task: any): void {
-    const data = {
-      TaskID: task.TaskID,
-      restoreOrder: this.taskList.length,
-    };
-    this.taskService.restoreTask(data).subscribe((response: any) => {
-      const task: Task = {
-        ...response,
-      };
-      this.taskList.push(task);
-      this.getCompletedTasks();
+  restoreTask(task: Task): void {
+    task.isComplete = false;
+    task.TaskStatus = 'Ready';
+    task.TaskPriority = 'Medium';
+    this.taskService.editTask(task).subscribe((response: Task) => {
+      this.taskList = this.taskService.updateTask(this.taskList, task, response);
       this.openSnackBar('Task Restored', 'Dismiss');
     });
   }
 
   archiveTask(task: any): void {
-    this.taskService.archiveTask(task).subscribe((response) => {
-      this.completedTaskList = this.completedTaskList.filter(
-        (el) => el.TaskID != task.TaskID
-      );
+    task.isArchived = true;
+    this.taskService.editTask(task).subscribe((response: Task) => {
+      this.taskList = this.taskService.updateTask(this.taskList, task, response);
       this.openSnackBar('Task Archived', 'Dismiss');
     });
   }
 
-  //Get the index to be set on the task
-  getIndextoSet(ListID: string): number {
-    return this.taskList.filter((el) => el.ListID == ListID).length;
-  }
-
   getMomentFormat(TaskDueDate: any): string {
-    return moment(TaskDueDate).format('MMM Do YY');
+    return moment(TaskDueDate).format('MMM Do YYYY');
   }
 
   getBorderColor(priority: string): string {
@@ -228,24 +173,6 @@ export class TaskListComponent {
 
   //Logic for drag and drop of task items
   drop(event: CdkDragDrop<string[]>) {
-    console.log(
-      'P_Index: ' + event.previousIndex + ' C_Index:' + event.currentIndex
-    );
 
-    this._moveable
-      .moveTask(
-        this.taskList[event.previousIndex].TaskID,
-        this.taskList[event.previousIndex].ListID,
-        event.currentIndex,
-        event.previousIndex
-      )
-      .subscribe((response) => {
-        console.log(response);
-        //moveItemInArray(this.listMenu, event.previousIndex, event.currentIndex);
-        this.taskList = response.sort(function (a, b) {
-          return a.TaskOrder - b.TaskOrder;
-        });
-      });
-    //moveItemInArray(this.taskList, event.previousIndex, event.currentIndex);
   }
 }

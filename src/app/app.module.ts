@@ -45,11 +45,14 @@ import { SpinnerComponent } from './components/spinner/spinner.component';
 import { TaskCompletePipePipe } from './pipes/task-complete-pipe/task-complete-pipe.pipe';
 import { SpinnerServiceService } from './services/spinner-service/spinner-service.service';
 import { RequestInterceptor } from './interceptors/request-interceptor/request-interceptor';
+import {MatTabsModule} from '@angular/material/tabs';
 
 import { FullCalendarModule } from '@fullcalendar/angular'; // the main connector. must go first
 import dayGridPlugin from '@fullcalendar/daygrid'; // a plugin
 import interactionPlugin from '@fullcalendar/interaction';
-import { ArchiveListComponent } from './components/main-container/archive-list/archive-list.component'; // a plugin
+import { ArchiveListComponent } from './components/main-container/archive-list/archive-list.component';
+import { DialogListPipePipe } from './pipes/dialog-list-pipe/dialog-list-pipe.pipe';
+import { LoginComponent } from './login/login.component'; // a plugin
 
 FullCalendarModule.registerPlugins([ // register FullCalendar plugins
   dayGridPlugin,
@@ -76,7 +79,9 @@ FullCalendarModule.registerPlugins([ // register FullCalendar plugins
     DeleteConfirmationDialogComponent,
     SpinnerComponent,
     TaskCompletePipePipe,
-    ArchiveListComponent
+    ArchiveListComponent,
+    DialogListPipePipe,
+    LoginComponent
   ],
   imports: [
     BrowserModule,
@@ -103,7 +108,8 @@ FullCalendarModule.registerPlugins([ // register FullCalendar plugins
     MatDividerModule,
     HttpClientModule,
     MatProgressSpinnerModule,
-    FullCalendarModule
+    FullCalendarModule,
+    MatTabsModule
   ],
   providers: [ListMenuResolverService, TaskListResolverService, SpinnerServiceService, { provide: HTTP_INTERCEPTORS, useClass: RequestInterceptor, multi: true }],
   bootstrap: [AppComponent]
