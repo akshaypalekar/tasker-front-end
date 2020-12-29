@@ -25,7 +25,7 @@
                 <mat-card-content>
                     <form (submit)="onSignUp(signUpForm)" #signUpForm="ngForm">
                         <mat-form-field appearance="outline">
-                            <input matInput type="email" placeholder="Ex. pat@example.com" required name="email" ngModel #email="ngModel">
+                            <input matInput type="email" placeholder="Ex. pat@example.com (Enter a valid email)" required name="email" ngModel #email="ngModel">
                             <mat-error *ngIf="email.invalid">Email is required</mat-error>
                             <mat-icon matSuffix>email</mat-icon>
                         </mat-form-field>
