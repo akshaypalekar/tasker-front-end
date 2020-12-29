@@ -15,12 +15,12 @@ export class TaskListResolverService implements Resolve<any> {
   
    resolve(route: ActivatedRouteSnapshot, state: RouterStateSnapshot): Observable<Task[]> {
     
-    let user = 'akshay123';
+    let user = localStorage.getItem('userID');
     let params = new HttpParams();
     params = params.append('itemType', 'task');
     params = params.append('archiveFlag', 'true');
     
-    return this.http.get<Task[]>(environment.api_endpoint + 'users/'+ user +'/items', {params: params});
+    return this.http.get<Task[]>(environment.api_endpoint, {params: params});
   }
 
 

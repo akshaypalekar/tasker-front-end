@@ -52,7 +52,10 @@ import dayGridPlugin from '@fullcalendar/daygrid'; // a plugin
 import interactionPlugin from '@fullcalendar/interaction';
 import { ArchiveListComponent } from './components/main-container/archive-list/archive-list.component';
 import { DialogListPipePipe } from './pipes/dialog-list-pipe/dialog-list-pipe.pipe';
-import { LoginComponent } from './login/login.component'; // a plugin
+import { LoginComponent } from './login/login.component';
+import { ConfirmComponent } from './confirm/confirm.component'; // a plugin
+import { AuthGuard } from './guards/authguard/auth.guard';
+import { ConfirmGuard } from './guards/confirmguard/confirm.guard';
 
 FullCalendarModule.registerPlugins([ // register FullCalendar plugins
   dayGridPlugin,
@@ -81,7 +84,8 @@ FullCalendarModule.registerPlugins([ // register FullCalendar plugins
     TaskCompletePipePipe,
     ArchiveListComponent,
     DialogListPipePipe,
-    LoginComponent
+    LoginComponent,
+    ConfirmComponent
   ],
   imports: [
     BrowserModule,
@@ -111,7 +115,7 @@ FullCalendarModule.registerPlugins([ // register FullCalendar plugins
     FullCalendarModule,
     MatTabsModule
   ],
-  providers: [ListMenuResolverService, TaskListResolverService, SpinnerServiceService, { provide: HTTP_INTERCEPTORS, useClass: RequestInterceptor, multi: true }],
+  providers: [AuthGuard, ConfirmGuard, ListMenuResolverService, TaskListResolverService, SpinnerServiceService, { provide: HTTP_INTERCEPTORS, useClass: RequestInterceptor, multi: true }],
   bootstrap: [AppComponent]
 })
 export class AppModule { }

@@ -1,0 +1,19 @@
+<div class="login-page">
+    <img src="../../assets/images/tasker_logo_new.png" class="tasker-logo">
+    <mat-card class="mat-elevation-z12">
+        <mat-tab-group mat-stretch-tabs class="example-stretched-tabs">
+            <mat-tab label="Confrimation">
+                <mat-card-content>
+                    <form (submit)="confirmSignUp(confirmForm)" #confirmForm="ngForm">
+                        <mat-form-field appearance="outline">
+                            <input matInput placeholder="Confrimation Code" required name="confirmCode" ngModel #confirmCode="ngModel">
+                            <mat-error *ngIf="confirmCode.invalid">Confirmation code is required</mat-error>
+                            <mat-icon matSuffix>vpn_key</mat-icon>
+                        </mat-form-field>
+                        <button mat-raised-button color="primary" class="login-button">Confrim</button>
+                    </form>
+                </mat-card-content>
+            </mat-tab>
+        </mat-tab-group>
+    </mat-card>
+</div>

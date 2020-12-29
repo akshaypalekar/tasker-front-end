@@ -13,7 +13,7 @@
         "build": {
           "builder": "@angular-devkit/build-angular:browser",
           "options": {
-            "allowedCommonJsDependencies":["chart.js"],
+            "allowedCommonJsDependencies":["node_modules/chart.js","crypto","buffer","crypto-js/hmac-sha256","aws-sdk/global","crypto-js/enc-base64"],
             "outputPath": "dist/tasker-front-end",
             "index": "src/index.html",
             "main": "src/main.ts",

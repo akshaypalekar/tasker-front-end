@@ -20,28 +20,31 @@ export class ReportDashboardComponent implements OnInit {
     "Low": "#3c78d8"
   }
 
-  constructor(private activatedRoute: ActivatedRoute) {}
+  constructor(private activatedRoute: ActivatedRoute) { }
 
   calendarOptions: CalendarOptions;
   @ViewChild('fullcalendar') fullcalendar: FullCalendarComponent;
 
   ngOnInit() {
     this.activatedRoute.data.subscribe((response) => {
-      this.calendarData = response.task.map((data) => {
+      console.log(response);
+      if (Object.keys(response).length != 0) {
+        this.calendarData = response.task.map((data) => {
           return {
             title: data.TaskTitle,
             date: moment(data.TaskDueDT).format('YYYY-MM-DD'),
             description: data.TaskDescription,
             color: this.colorMap[data.TaskPriority]
           };
-      }
-      );
+        }
+        );
 
-      this.dashboardData = response.task.map((data) => {
-        return {
-          ...data,
-        };
-      });
+        this.dashboardData = response.task.map((data) => {
+          return {
+            ...data,
+          };
+        });
+      }
     });
 
     //Calendar

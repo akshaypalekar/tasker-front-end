@@ -5,6 +5,7 @@ import { Observable } from 'rxjs';
 import { List } from 'src/app/models/list-model/list.model';
 import { HttpServiceService } from 'src/app/services/http-service/http-service.service';
 import { environment } from 'src/environments/environment';
+import { AuthServiceService } from '../../services/auth-service/auth-service.service';
 
 
 @Injectable({
@@ -12,13 +13,13 @@ import { environment } from 'src/environments/environment';
 })
 export class ListMenuResolverService implements Resolve<any>{
 
-  constructor(private http: HttpClient, public httpService: HttpServiceService) {}
+  constructor(private http: HttpClient, public httpService: HttpServiceService, public authService: AuthServiceService) {}
 
   resolve(route: ActivatedRouteSnapshot, state: RouterStateSnapshot) :Observable<List[]> {
-    let user = 'akshay123';
+
     let params = new HttpParams();
     params = params.append('itemType', 'list');
     
-    return this.http.get<List[]>(environment.api_endpoint + 'users/'+ user +'/items', {params: params});
+    return this.http.get<List[]>(environment.api_endpoint, {params: params});
   }
 }

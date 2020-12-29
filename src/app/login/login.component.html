@@ -5,7 +5,7 @@
         <mat-tab-group mat-stretch-tabs class="example-stretched-tabs">
             <mat-tab label="Sign In">
                 <mat-card-content>
-                    <form action="">
+                    <form (submit)="onSignIn(signInForm)" #signInForm="ngForm">
                         <mat-form-field appearance="outline">
                             <input matInput placeholder="Email" required name="email" ngModel #email="ngModel">
                             <mat-error *ngIf="email.invalid">Email is required</mat-error>
@@ -23,15 +23,9 @@
             </mat-tab>
             <mat-tab label="Sign Up">
                 <mat-card-content>
-                    <form action="">
+                    <form (submit)="onSignUp(signUpForm)" #signUpForm="ngForm">
                         <mat-form-field appearance="outline">
-                            <input matInput placeholder="User Name" required name="username" ngModel #username="ngModel">
-                            <mat-icon matSuffix>perm_identity</mat-icon>
-                            <mat-error *ngIf="username.invalid">Username is required</mat-error>
-
-                        </mat-form-field>
-                        <mat-form-field appearance="outline">
-                            <input matInput placeholder="Email" required name="email" ngModel #email="ngModel">
+                            <input matInput type="email" placeholder="Ex. pat@example.com" required name="email" ngModel #email="ngModel">
                             <mat-error *ngIf="email.invalid">Email is required</mat-error>
                             <mat-icon matSuffix>email</mat-icon>
                         </mat-form-field>
@@ -40,7 +34,6 @@
                             <mat-error *ngIf="password.errors && password.errors.required">Password is required</mat-error>
                             <mat-error *ngIf="password.errors && password.errors.minlength">Password must be of length 6</mat-error>
                             <mat-icon matSuffix>lock</mat-icon>
-
                         </mat-form-field>
                         <mat-form-field appearance="outline">
                             <input matInput placeholder="Password" type="password" required minlength="6" name="repassword" ngModel #repassword="ngModel">

@@ -14,10 +14,11 @@ export class ReportResolverService implements Resolve<any> {
   constructor(private http: HttpClient, public httpService: HttpServiceService, private activatedRoute: ActivatedRoute) { }
   
    resolve(route: ActivatedRouteSnapshot, state: RouterStateSnapshot): Observable<Task[]> {
-    let user = 'akshay123';
+    
     let params = new HttpParams();
     params = params.append('itemType', 'task');
     params = params.append('archiveFlag', 'false');
-    return this.http.get<Task[]>(environment.api_endpoint + 'users/'+ user +'/items', {params: params});
+    
+    return this.http.get<Task[]>(environment.api_endpoint, {params: params});
   }
 }

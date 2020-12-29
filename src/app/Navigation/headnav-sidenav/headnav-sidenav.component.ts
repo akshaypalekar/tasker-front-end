@@ -2,6 +2,7 @@ import { Component } from '@angular/core';
 import { BreakpointObserver, Breakpoints } from '@angular/cdk/layout';
 import { Observable } from 'rxjs';
 import { map, shareReplay } from 'rxjs/operators';
+import { AuthServiceService } from '../../services/auth-service/auth-service.service';
 
 @Component({
   selector: 'app-headnav-sidenav',
@@ -18,6 +19,10 @@ export class HeadnavSidenavComponent {
       shareReplay()
     );
 
-  constructor(private breakpointObserver: BreakpointObserver) {}
+  constructor(private breakpointObserver: BreakpointObserver, public authService: AuthServiceService) {}
+
+  onSignOut(){
+    this.authService.signOut();
+  }
 
 }
