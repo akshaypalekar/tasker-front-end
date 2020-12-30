@@ -54,7 +54,7 @@ export class LoginComponent implements OnInit {
         });
         localStorage.setItem('emailID', username);
         this.router.navigate(['confirm']);
-        this.openSnackBar('Enter confirmation code', 'Dismiss');
+        this.openSnackBar('Kindly enter the confirmation code sent to ' + username, 'Dismiss');
       } catch (error) {
         console.log('error signing up:', error);
       }
