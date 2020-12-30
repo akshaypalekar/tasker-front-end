@@ -6,6 +6,7 @@
                 <mat-card-content>
                     <form (submit)="confirmSignUp(confirmForm)" #confirmForm="ngForm">
                         <mat-form-field appearance="outline">
+                            <mat-hint align="start"><strong>Enter the confirmation code sent to your email address</strong> </mat-hint>
                             <input matInput placeholder="Confrimation Code" required name="confirmCode" ngModel #confirmCode="ngModel">
                             <mat-error *ngIf="confirmCode.invalid">Confirmation code is required</mat-error>
                             <mat-icon matSuffix>vpn_key</mat-icon>
